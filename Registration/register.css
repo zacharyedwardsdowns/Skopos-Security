@@ -1,0 +1,64 @@
+html {
+  height: 100%;
+  background-image: url("../Pictures/Background.png");
+}
+
+#regbox {
+  margin-top: 20px;
+}
+
+#logo {
+  margin-top: 100px;
+}
+
+#email {
+  margin-bottom: 30px;
+}
+
+#username {
+  margin-bottom: 30px;
+  margin-right: 12px;
+}
+
+#phonenumber {
+  margin-bottom: 30px;
+}
+
+#password {
+  margin-bottom: 30px;
+  margin-right: 12px;
+}
+
+#passwordcheck {
+  margin-bottom: 30px;
+}
+
+input[type=text] {
+  padding: 5px;
+  border:2px solid #FFF;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+input[type=password] {
+  padding: 5px;
+  border:2px solid #FFF;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+input[type=email] {
+  padding: 5px;
+  border:2px solid #FFF;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+input[type=submit] {
+  padding:5px 15px;
+  background:#CCC;
+  border:0 none;
+  cursor:pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
