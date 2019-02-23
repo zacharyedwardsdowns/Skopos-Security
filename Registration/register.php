@@ -31,7 +31,6 @@
 				<div class="row">
 					<input type="submit" id="regbutton" value="Register"/>
 				</div>
-				<div class="g-recaptcha" data-sitekey="6Ld0eY0UAAAAANTimW_Y0h9T7hBG6e_yGGSsxIXG" required></div>
 			</form>
 		</div>
 	</div>
