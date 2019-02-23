@@ -26,6 +26,9 @@
 					<input type="password" id="passwordcheck" placeholder="Confirm Password*" size="18" required/>
 				</div>
 				<div class="row">
+				<div class="g-recaptcha" data-sitekey="6Ld0eY0UAAAAANTimW_Y0h9T7hBG6e_yGGSsxIXG" style="transform:scale(1.02);-webkit-transform:scale(1.02);transform-origin:0 0;-webkit-transform-origin:0 0;" required></div>
+				</div>
+				<div class="row">
 					<input type="submit" id="regbutton" value="Register"/>
 				</div>
 				<div class="g-recaptcha" data-sitekey="6Ld0eY0UAAAAANTimW_Y0h9T7hBG6e_yGGSsxIXG" required></div>

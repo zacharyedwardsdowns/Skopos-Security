@@ -3,6 +3,10 @@ html {
   background-image: url("../Pictures/Background.png");
 }
 
+.g-recaptcha{
+  padding-left: 128px;
+}
+
 #regbox {
   margin-top: 20px;
 }
