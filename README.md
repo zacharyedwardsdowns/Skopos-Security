@@ -14,4 +14,4 @@ It will be coded using HTML, CSS, and PHP. The accompanying database will be don
 Sensitive user data will be encrypted using the PassLib library in Python before being stored.
 
 ###### Disclamer
-Some information such as keys to check captcha are apart of the repository as this is not a real service.
+Some information such as captcha keys are a part of the repository as this is not a real service but a group project.
