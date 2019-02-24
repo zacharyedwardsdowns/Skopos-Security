@@ -12,3 +12,6 @@ The website is for configuring the system and accessing the data it uploads.
 It will be coded using HTML, CSS, and PHP. The accompanying database will be done in MySQL.
 
 Sensitive user data will be encrypted using the PassLib library in Python before being stored.
+
+###### Disclamer
+Some information such as keys to check captcha are apart of the repository as this is not a real service.
