@@ -1,4 +1,7 @@
 <?php
+//
+// Tests that the captcha is correct. (Comnpromised, but that's okay for now.)
+//
     // Defines the variable captcha.
     $captcha;
 
@@ -21,10 +24,77 @@
     if($response['success'] == false)
     {
         echo '<h2>Damn robots! Get off my webpage!</h2>';
+        exit;
     }
-    else
+
+//
+// Tests for database duplicates.
+//
+    // Attempt MySQL server connection.
+    $link = mysqli_connect("localhost", "root", "", "skopos");
+
+    // Check if connected. If not throw error.
+    if($link === false)
     {
-        $url = 'https://skopossecurity.com';
-        header( "Location: $url" );
+        die("ERROR: Unable to establish connection to the database: " . mysqli_connect_error()); // Function outputs the cause of the error after the string.
     }
+
+    // Stores post data into variables.
+    $email =  $_POST['em'];
+    $username = $_POST['uname'];
+    $password = $_POST['pass'];
+    $phonenumber = $_POST['phnnum'];
+
+    // Check if the password matches, if not then return to the registration page.
+    if($password !== $_POST['passcheck'])
+    {
+        $url = 'https://skopossecurity.com/register.html';
+        header( "Location: $url" );
+        mysqli_close($link);
+        exit;
+    }
+
+    // Check for duplicates in the database. If detected return to the registration page.
+    function check($link, $query)
+    {
+        $result = mysqli_query($link, $query);
+
+        if (mysqli_num_rows($result) == 0)
+        {
+            return;
+        }
+        else 
+        {
+            $url = 'https://skopossecurity.com/register.html';
+            header( "Location: $url" );
+            mysqli_close($link);
+            exit;
+        }
+    }
+
+    // If all queries return no duplicates then the data may be stored in the database.
+    $sql = "SELECT email FROM userdata WHERE email='$email';";
+    check($link, $sql);
+    $sql = "SELECT username FROM userdata WHERE username='$username';";
+    check($link, $sql);
+    $sql = "SELECT phonenumber FROM userdata WHERE phonenumber='$phonenumber';";
+    check($link, $sql);
+
+//
+// Stores userdata into the database.
+//
+    // Prepare string for database insertion.
+    $sql = "INSERT INTO userdata (email, username, password, phonenumber) VALUES ('$email', '$username', '$password', '$phonenumber')";
+
+    // If insertion is succesul return to login page, else display error.
+    if(mysqli_query($link, $sql)){
+        $url = 'https://skopossecurity.com/index.html';
+        header( "Location: $url" );
+    } else{
+        echo "ERROR: Unable to complete insertion into database. " . mysqli_error($link);
+    }
+
+    // close connection
+    mysqli_close($link);
+
 ?>
