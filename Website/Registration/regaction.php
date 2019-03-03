@@ -31,7 +31,7 @@
 // Tests for database duplicates.
 //
     // Attempt MySQL server connection.
-    $link = mysqli_connect("localhost", "root", "", "skopos");
+    $link = mysqli_connect("localhost", "root", "juicy", "skopos");
 
     // Check if connected. If not throw error.
     if($link === false)
@@ -84,7 +84,7 @@
 // Stores userdata into the database.
 //
     // Prepare string for database insertion.
-    $sql = "INSERT INTO userdata (email, username, password, phonenumber) VALUES ('$email', '$username', '$password', '$phonenumber')";
+    $sql = "INSERT INTO userdata (email, username, usrpass, phonenumber, loggedin) VALUES ('$email', '$username', '$password', '$phonenumber', FALSE)";
 
     // If insertion is succesul return to login page, else display error.
     if(mysqli_query($link, $sql)){
