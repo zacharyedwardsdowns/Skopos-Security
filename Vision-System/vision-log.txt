@@ -1,0 +1,2 @@
+Connected to the ftp server for skopossecurity.com.
+Succesfully logged into the server!
