@@ -41,7 +41,7 @@ ftpUser = "ftpuser"
 ftpPass = "juicy"
 
 # Opens file for writing logs in the Vision System directory.
-os.chdir("Vision System")
+os.chdir("Vision-System")
 log = open("vision-log.txt","w")
 
 # Attempts a connection to the the ftp server.
