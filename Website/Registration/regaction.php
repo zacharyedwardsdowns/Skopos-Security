@@ -12,7 +12,7 @@
     // If captcha was not filled out, redirect user to the registration page.
     if(!$captcha)
     {
-        $url = 'https://skopossecurity.com/register.html';
+        $url = 'https://skopossecurity.com/register';
         header( "Location: $url" );
         exit;
     }
@@ -48,7 +48,7 @@
     // Check if the password matches, if not then return to the registration page.
     if($password !== $_POST['passcheck'])
     {
-        $url = 'https://skopossecurity.com/register.html';
+        $url = 'https://skopossecurity.com/register';
         header( "Location: $url" );
         mysqli_close($link);
         exit;
@@ -65,7 +65,7 @@
         }
         else 
         {
-            $url = 'https://skopossecurity.com/register.html';
+            $url = 'https://skopossecurity.com/register';
             header( "Location: $url" );
             mysqli_close($link);
             exit;
@@ -88,7 +88,7 @@
 
     // If insertion is succesul return to login page, else display error.
     if(mysqli_query($link, $sql)){
-        $url = 'https://skopossecurity.com/index.html';
+        $url = 'https://skopossecurity.com/index';
         header( "Location: $url" );
     } else{
         echo "ERROR: Unable to complete insertion into database. " . mysqli_error($link);
