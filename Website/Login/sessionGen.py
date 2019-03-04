@@ -1,6 +1,6 @@
 ###
 ###
-### UNFINISHED. DO NOT USE.
+### STILL NEEDS TO TAKE USER NAME INTO ACCOUNT. (do after logacction php)
 ###
 ###
 
@@ -17,31 +17,41 @@ thesalt = open("salts","r")
 # Use a salt for encryption.
 hashids = Hashids(salt=thesalt.readline(), min_length=32)
 
-# Generate a random integer for encoding.
-randnum = 890564388 #random.randint(1000000, 1000000000)
+# Function to generate a unique hash.
+def genHash():
+    # Generate a random integer for encoding.
+    randnum = random.randint(1000000, 1000000000)
 
-print(randnum)
+    # Encode the integer.
+    hashgen = hashids.encode(randnum)
+
+    return hashgen
 
 # Connect to the database.
 link = pymysql.connect(host='localhost', user='root', password='juicy', db='skopos')
 cursor = link.cursor()
 
-# Encode the integer.
-hashid = hashids.encode(randnum)
+# Create loop condition.
+duplicate = True
 
-# Test for duplicates.
-sql = ("SELECT sessionID FROM sessions WHERE sessionID=%s", (hashid))
-cursor.execute(*sql)
 
-if (cursor.rowcount == 0):
-    print (hashid)
+# Loop until a unique hash is generated.
+while (duplicate == True):
+    # Generate a hash.
+    hashid = genHash()
 
-    # Decode for test.
-    test = hashids.decode(hashid)
-
-    print(test)
-
-    sql = ("INSERT INTO sessions VALUES('fake', %s)", (hashid))
+    # Test for duplicates.
+    sql = ("SELECT sessionID FROM sessions WHERE sessionID=%s", (hashid))
     cursor.execute(*sql)
-    link.commit()
-    link.close()
+
+    if (cursor.rowcount == 0):
+        duplicate = False
+  
+
+# Insert the unique hash into the database.
+sql = ("INSERT INTO sessions VALUES('fake', %s)", (hashid))
+cursor.execute(*sql)
+link.commit()
+
+# Close the connection to the database.
+link.close()
