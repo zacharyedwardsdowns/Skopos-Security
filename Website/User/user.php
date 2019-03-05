@@ -23,7 +23,7 @@
 
 	// If the user show their page, if not show an error.
 
-	if ($_SESSION["sessionID"] == $testSession[0])
+	if (isset($_SESSION["sessionID"]) && $_SESSION["sessionID"] == $testSession[0])
         {
 			?>
 
@@ -34,9 +34,33 @@
 				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
 			</head>
 			<body style="background-color:rgba(0,0,0,0);">
-			<?php
-				echo $username;
+
+			<?php // USED TO GRAB VIDEOS FROM THE FTP SERVER.
+				    // Variables for ftp access.
+					$ftpServer = "skopossecurity.com";
+					$ftpUser = "ftpuser";
+					$ftpPass = "juicy";
+				
+					// Set connection or exit script if failed.
+					$ftpLink = ftp_connect($ftpServer) or die("Unable to connect to $ftpServer");
+				
+					// Attempt to login.
+					if (@ftp_login($ftpLink, $ftpUser, $ftpPass) == false) 
+					{
+						echo "Failed to connect as $ftpUser";
+					}
+					else 
+					{
+						print ("Success!");
+					}
+				
+					
+
+					// Close server connection.
+					ftp_close($ftpLink);
+				
 			?>
+
 			</body>
 			</html>
 		
@@ -47,4 +71,6 @@
 			echo "Please login.";
 		}
 
+	// Close link to the database.
+	mysqli_close($link);
 ?>
