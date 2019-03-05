@@ -1,4 +1,7 @@
 <?php
+//
+// Check login data against database then generate a session ID.
+//
     // Begin a session on login.
     session_start();
 
@@ -38,5 +41,12 @@
     
     // Make it a $_SESSION variable so that it is accesible accross pages.
     $_SESSION["sessionID"] = $sessID[0];
-    
+    $_SESSION["username"] = $username;
+
+//
+// Send user to their userpage.
+//
+    //
+    $url = 'https://skopossecurity.com/user';
+    header( "Location: $url" );
 ?>

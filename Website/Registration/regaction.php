@@ -88,7 +88,7 @@
 
     // If insertion is succesul return to login page, else display error.
     if(mysqli_query($link, $sql)){
-        $url = 'https://skopossecurity.com/index';
+        $url = 'https://skopossecurity.com/login';
         header( "Location: $url" );
     } else{
         echo "ERROR: Unable to complete insertion into database. " . mysqli_error($link);
