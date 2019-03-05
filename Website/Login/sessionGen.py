@@ -1,17 +1,15 @@
-###
-###
-### STILL NEEDS TO TAKE USER NAME INTO ACCOUNT. (do after logacction php)
-###
-###
+#
+# Does not work when all files are in folders. To make it work put all files in all subfolders in the website folder. 
+#
 
 # Import hashids for generatinf a custom hash for login checking.
 from hashids import Hashids
 import pymysql
 import random
+import sys
 import os
 
 # Grab the salt.
-os.chdir("Website")
 thesalt = open("salts","r")
 
 # Use a salt for encryption.
@@ -34,7 +32,6 @@ cursor = link.cursor()
 # Create loop condition.
 duplicate = True
 
-
 # Loop until a unique hash is generated.
 while (duplicate == True):
     # Generate a hash.
@@ -47,9 +44,8 @@ while (duplicate == True):
     if (cursor.rowcount == 0):
         duplicate = False
   
-
 # Insert the unique hash into the database.
-sql = ("INSERT INTO sessions VALUES('fake', %s)", (hashid))
+sql = ("INSERT INTO sessions VALUES(%s, %s)", (sys.argv[1], hashid))
 cursor.execute(*sql)
 link.commit()
 
