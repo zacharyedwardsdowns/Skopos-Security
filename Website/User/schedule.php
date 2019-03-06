@@ -35,31 +35,7 @@
 			</head>
 			<body style="background-color:rgba(0,0,0,0);">
 
-			<?php // USED TO GRAB VIDEOS FROM THE FTP SERVER.
-				    // Variables for ftp access.
-					$ftpServer = "skopossecurity.com";
-					$ftpUser = "ftpuser";
-					$ftpPass = "juicy";
-				
-					// Set connection or exit script if failed.
-					$ftpLink = ftp_connect($ftpServer) or die("Unable to connect to $ftpServer");
-				
-					// Attempt to login.
-					if (@ftp_login($ftpLink, $ftpUser, $ftpPass) == false) 
-					{
-						echo "Failed to connect as $ftpUser";
-					}
-					else 
-					{
-						print ("Success!");
-					}
-				
-					
-
-					// Close server connection.
-					ftp_close($ftpLink);
-				
-			?>
+            
 
 			</body>
 			</html>
