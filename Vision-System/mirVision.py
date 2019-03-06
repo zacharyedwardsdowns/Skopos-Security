@@ -31,31 +31,25 @@
 # +Queueing clip for deletion as soon as upload is verfied in high alert mode.
 
 
-
-from ftplib import FTP # Import for ftp server.
+import paramiko
 import os # Import to change directroy.
 
-# Necessary information to connect to the ftp server.
-ftpServer = "skopossecurity.com"
-ftpUser = "ftpuser"
-ftpPass = "juicy"
+username = "fake"
 
 # Opens file for writing logs in the Vision System directory.
 os.chdir("Vision-System")
-log = open("vision-log.txt","w")
 
-# Attempts a connection to the the ftp server.
-if FTP(ftpServer):
-  ftp = FTP(ftpServer) # Sets the server for future commands.
-  log.write("Connected to the ftp server for " + ftpServer + ".\n")
-else:
-  log.write("Connection to the ftp server for " + ftpServer + " failed...\n")
+sshclient = paramiko.SSHClient()
+sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+sshclient.connect(hostname="skopossecurity.com", username="ftpuser", password="juicy")
 
-# Attempts to login to the server.
-if ftp.login(ftpUser, ftpPass):
-  log.write("Succesfully logged into the server!\n")
-else:
-  log.write("Login to the server failed...\n")
+stdin,stdout,stderr = sshclient.exec_command("ls")
 
-log.close() # Closes log file.
-ftp.close() # Closes the ftp connection.
+print(stdout.readlines())
+
+# UPLOAD
+ftpclient = sshclient.open_sftp()
+ftpclient.put("testimage.jpg", username + "/testimage.jpg")
+ftpclient.close()
+
+sshclient.close()
