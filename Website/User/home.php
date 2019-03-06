@@ -38,6 +38,12 @@
 			<?php // USED TO GRAB VIDEOS FROM THE FTP SERVER.
 				
 			?>
+				<!--THIS BUTTON EXECUTES LOG OUT-->
+				<div class="col-sm-3">
+					<form action="logout.php">
+						<input type="submit" value="Logout" id="logout"/>
+					</form>
+				</div>
 
 			</body>
 			</html>
