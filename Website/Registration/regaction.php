@@ -88,7 +88,7 @@
 
     // If insertion is succesul return to login page, else display error.
     if(mysqli_query($link, $sql)){
-        $url = 'https://skopossecurity.com/index';
+        $url = 'https://skopossecurity.com/login';
         header( "Location: $url" );
     } else{
         echo "ERROR: Unable to complete insertion into database. " . mysqli_error($link);
@@ -96,5 +96,32 @@
 
     // close connection
     mysqli_close($link);
+
+//
+// Makes ftp directory for the user.
+//
+    // Variables for ftp access.
+    $ftpServer = "skopossecurity.com";
+    $ftpUser = "ftpuser";
+    $ftpPass = "juicy";
+
+    // Set connection or exit script if failed.
+    $ftpLink = ftp_connect($ftpServer) or die("Unable to connect to $ftpServer");
+
+    // Attempt to login.
+    if (@ftp_login($ftpLink, $ftpUser, $ftpPass)) 
+    {
+        echo "Connected as $ftpUser@$ftpServer";
+    }
+    else 
+    {
+        echo "Failed to connect as $ftpUser";
+    }
+
+    // Creates a personal folder for the newly registerd account.
+    ftp_mkdir($ftpLink, $username);
+
+    // Close server connection.
+    ftp_close($ftpLink);
 
 ?>
