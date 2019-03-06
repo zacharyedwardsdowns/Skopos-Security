@@ -31,25 +31,32 @@
 # +Queueing clip for deletion as soon as upload is verfied in high alert mode.
 
 
-import paramiko
+import paramiko # Used to set up ssh and sftp.
 import os # Import to change directroy.
 
+# For our project we will be assuming the owner of this camera is fake.
 username = "fake"
 
-# Opens file for writing logs in the Vision System directory.
+# Change the working directory.
 os.chdir("Vision-System")
 
-sshclient = paramiko.SSHClient()
-sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-sshclient.connect(hostname="skopossecurity.com", username="ftpuser", password="juicy")
+# Connecting to the server.
+sshclient = paramiko.SSHClient() # Create an ssh client.
+sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # Affirm that you trust the server being connected to.
+sshclient.connect(hostname="skopossecurity.com", username="ftpuser", password="juicy") # Attempt a connection to the server.
 
-stdin,stdout,stderr = sshclient.exec_command("ls")
+####### EXAMPLE FILE UPLOAD #######
+##### Get the current directory of the ftp server.
+### stdin,stdout,stderr = sshclient.exec_command("ls")
+###
+##### Print the results of the current directory.
+### print(stdout.readlines())
+###
+##### Create an ftp client then upload a test image.
+### ftpclient = sshclient.open_sftp()
+### ftpclient.put("testimage.jpg", username + "/testimage.jpg")
+### ftpclient.close()
+###################################
 
-print(stdout.readlines())
-
-# UPLOAD
-ftpclient = sshclient.open_sftp()
-ftpclient.put("testimage.jpg", username + "/testimage.jpg")
-ftpclient.close()
-
+# Close the ssh client.
 sshclient.close()
