@@ -2,7 +2,7 @@
 A motion detection/image recognition vision system with an accompanying website.
 
 #### Vision System
-Will utilize a raspberry pi with a webcam for a camera.
+Will utilize a raspberry pi with a webcam for a camera!
 
 The vision system will be programmed in Python using the openCV library.
 
