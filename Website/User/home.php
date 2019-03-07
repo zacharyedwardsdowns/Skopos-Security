@@ -1,5 +1,5 @@
 <?php
-// Carries over session from login.
+	// Carries over session from login.
 	session_start();
 
 	// Check sessionID against the database.
@@ -30,21 +30,42 @@
             <html>
 			<head>
 				<title>Skopos Security - User Home</title>
-				<link rel="stylesheet" type="text/css" href="register.css"/>
+				<link rel="stylesheet" type="text/css" href="user.css"/>
 				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
 			</head>
 			<body style="background-color:rgba(0,0,0,0);">
 
-			<?php // USED TO GRAB VIDEOS FROM THE FTP SERVER.
+			<?php // Grabs images from the ftp server.
 				
+				// Change the working directory to the user's account folder.
+				chdir("ftpserver/$username");
+
+				// Grab all file names from the user's account folder with
+				// the .jpg extension and store them in the images array.
+				foreach(glob('*jpg') as $filename){
+					$images[] = (basename($filename));
+				}
+
 			?>
-				<!--THIS BUTTON EXECUTES LOG OUT-->
-				<div class="col-sm-3">
-					<form action="logout.php">
-						<input type="submit" value="Logout" id="logout"/>
-					</form>
+
+				<div class="container">
+					<div class="col sm-4">
+					</div>
+					<div class="col sm-4">
+						<!--LOOP DISPLAYING ALL IMAGES IN USER'S ACCOUNT FOLDER-->
+						<?php for($i = 0; $i < sizeof($images); $i++): ?>
+							<div class="row">
+								<img class="with-margin" src="ftpserver/fake/<?php echo $images[$i]; ?>"  width="512" height="288">
+							</div>
+						<?php endfor; ?>
+					</div>
 				</div>
 
+				<!--THIS BUTTON EXECUTES LOG OUT-->
+				<form action="logout.php">
+					<input type="submit" value="Logout" id="logout"/>
+				</form>
+				
 			</body>
 			</html>
 		

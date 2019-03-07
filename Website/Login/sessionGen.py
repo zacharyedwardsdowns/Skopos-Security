@@ -45,7 +45,7 @@ while (duplicate == True):
         duplicate = False
   
 # Insert the unique hash into the database.
-sql = ("INSERT INTO sessions VALUES(%s, %s)", (sys.argv[1], hashid))
+sql = ("INSERT INTO sessions VALUES (%s, %s)", (sys.argv[1], hashid))
 cursor.execute(*sql)
 link.commit()
 
