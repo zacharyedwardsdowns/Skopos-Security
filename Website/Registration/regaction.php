@@ -98,30 +98,33 @@
     mysqli_close($link);
 
 //
-// Makes ftp directory for the user.
+// Makes sftp directory for the user.
 //
-    // Variables for ftp access.
-    $ftpServer = "skopossecurity.com";
-    $ftpUser = "ftpuser";
-    $ftpPass = "juicy";
+    // Variables for sftp access.
+    $server = "skopossecurity.com";
+    $user = "ftpuser";
+    $pass = "juicy";
 
-    // Set connection or exit script if failed.
-    $ftpLink = ftp_connect($ftpServer) or die("Unable to connect to $ftpServer");
+    // Set ssh connection or exit script if failed.
+    $link = ssh2_connect($server, 22) or die("Unable to connect to $server");
 
     // Attempt to login.
-    if (@ftp_login($ftpLink, $ftpUser, $ftpPass)) 
+    if (@ssh2_auth_password($link, $user, $pass)) 
     {
-        echo "Connected as $ftpUser@$ftpServer";
+        echo "Connected as $user@$server";
     }
     else 
     {
-        echo "Failed to connect as $ftpUser";
+        echo "Failed to connect as $user";
     }
 
-    // Creates a personal folder for the newly registerd account.
-    ftp_mkdir($ftpLink, $username);
+    // Establish an sftp connection via ssh.
+    $sftp = ssh2_sftp($link);
 
-    // Close server connection.
-    ftp_close($ftpLink);
+    // Creates a personal folder for the newly registerd account.
+    ssh2_sftp_mkdir($sftp, $username);
+
+    // Closes the connection.
+    ssh2_disconnect($link);
 
 ?>
