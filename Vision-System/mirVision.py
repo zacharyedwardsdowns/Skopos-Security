@@ -30,30 +30,55 @@
 # +Entering of high alert mode if clip reaches 15 minutes.
 # +Queueing clip for deletion as soon as upload is verfied in high alert mode.
 
+###
+### Initializtation section.
+###
 
 import paramiko # Used to set up ssh and sftp.
-import os # Import to change directroy.
+import cv2 # For reading and writing from camera + motion detection and object tracking/recognition.
 
-# For our project we will be assuming the owner of this camera is fake.
-username = "fake"
-
-# Connecting to the server.
+# Establish an ssh connection to the server.
 sshclient = paramiko.SSHClient() # Create an ssh client.
 sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # Affirm that you trust the server being connected to.
 sshclient.connect(hostname="skopossecurity.com", username="ftpuser", password="juicy") # Attempt a connection to the server.
 
-####### EXAMPLE FILE UPLOAD #######
-# Get the current directory of the ftp server.
-#stdin,stdout,stderr = sshclient.exec_command("ls")
+codec = cv2.VideoWriter_fourcc(*'H264') # Define the codec used to compress video files.
+
+
+
 ###
-# Print the results of the current directory.
-#print(stdout.readlines())
+### Camera operation functions.
 ###
-# Create an ftp client then upload a test image.
-#ftpclient = sshclient.open_sftp()
-#ftpclient.put("output.mkv", username + "/output.mkv")
-#ftpclient.close()
-###################################
+
+#
+def NameGen():
+    
+
+#
+def Record():
+
+    camera = cv2.VideoCapture(0) # Set up a video feed from the camera
+    frame0 = None # Initalize first video frame
+
+    while(camera.isOpened()):
+
+
+
+
+# Uploads images and videos to a user's folder on the server.
+def Uplaod(filename, extension):
+
+    file = filename + "." + extension # Combines filename and extension.
+
+    sftpclient = sshclient.open_sftp() # Opens an sftp connection.
+    sftpclient.put(file, username + "/" file) # Writes file to the user's folder.
+    sftpclient.close() # Closes the sftp connection.
+
+
+
+###
+### Cleanup before exit.
+###
 
 # Close the ssh client.
 sshclient.close()
