@@ -42,8 +42,7 @@ sshclient = paramiko.SSHClient() # Create an ssh client.
 sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # Affirm that you trust the server being connected to.
 sshclient.connect(hostname="skopossecurity.com", username="ftpuser", password="juicy") # Attempt a connection to the server.
 
-codec = cv2.VideoWriter_fourcc(*'H264') # Define the codec used to compress video files.
-
+codec = cv2.VideoWriter_fourcc('M','J','P','G') # Define the codec used to compress video files.
 
 
 ###
@@ -51,19 +50,32 @@ codec = cv2.VideoWriter_fourcc(*'H264') # Define the codec used to compress vide
 ###
 
 #
-def NameGen():
+#def NameGen():
     
 
 #
 def Record():
-
     camera = cv2.VideoCapture(0) # Set up a video feed from the camera
-    frame0 = None # Initalize first video frame
+    vidout = cv2.VideoWriter('output.mkv', codec, 30, (640,480))
 
     while(camera.isOpened()):
+        ret, frame = camera.read()
 
+        if ret == True:
 
+            vidout.write(frame);
+            cv2.imshow('frame', frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        else:
+            stopRecord();
+            break
 
+#
+def stopRecord():
+    camera.release()
+    vidout.release()
+    cv2.destroyAllWindows()
 
 # Uploads images and videos to a user's folder on the server.
 def Uplaod(filename, extension):
@@ -71,14 +83,14 @@ def Uplaod(filename, extension):
     file = filename + "." + extension # Combines filename and extension.
 
     sftpclient = sshclient.open_sftp() # Opens an sftp connection.
-    sftpclient.put(file, username + "/" file) # Writes file to the user's folder.
+    sftpclient.put(file, username + "/" + file) # Writes file to the user's folder.
     sftpclient.close() # Closes the sftp connection.
-
-
 
 ###
 ### Cleanup before exit.
 ###
+
+Record()
 
 # Close the ssh client.
 sshclient.close()
