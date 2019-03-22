@@ -55,17 +55,26 @@ codec = cv2.VideoWriter_fourcc('M','J','P','G') # Define the codec used to compr
 ###
 
 #
-def NameGen(type):
+def NameGen(type, extension):
     
+    i = 0 # Incrimentor variable.
+    found = False # Whether a name could be generated.
+
     if type == "footage": # If of type footage make cwd Footage
         os.chdir("Footage")
+        n = FOOTAGELIM # n is used to set a loop limit for later in the function.
+
     elif type == "clip": # If of type clip make cwd Clips
         os.chdir("Clips")
+        n = CLIPLIM
+
     elif type == "image": # If of type image make cwd Images
         os.chdir("Images")
+        n = IMAGELIM
+
     else:
         print ("Error creating file name.")
-        sys.exit(1) # If none of the above exit with eroor.
+        sys.exit(1) # If none of the above exit with error.
     
     # Grab a list of files from current diretory.
     for files in os.walk("."):
@@ -73,10 +82,30 @@ def NameGen(type):
             if filename  is not ".":
                 file = filename
 
-    # Generate an unused filename
+    file.sort() # Sort file list alphabetically
+
+    # Generate an unused filename.
     for i in range(n):
 
-    os.chdir("..")
+        # If all files have been checked and i is less than the limit generate a name then break.
+        if i >= len(file) and i < n:
+            namegen = type + str(i) + "." + extension
+            found = True
+            break
+
+        namegen = type + str(i) + '.' + extension # Generate a file name.
+
+        # If the generated file name does not exist then use it an break.
+        if namegen != file[i]:
+            found = True
+            break
+
+    if found == True:
+        os.chdir("..") # Return to the original wd.
+        return namegen
+    else:
+        print("No more space to generate files.")
+        sys.exit(1)
 
 # Starts the recording of 5 minute footage segments.
 def Record():
@@ -118,7 +147,8 @@ def Uplaod(filename, extension):
 ### Cleanup before exit.
 ###
 
-NameGen("footage")
+namegen = NameGen("footage", "mkv")
+print(namegen)
 
 sshclient.close() # Close the ssh client.
 sys.exit(0) # Exit without error.
