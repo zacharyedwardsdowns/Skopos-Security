@@ -47,6 +47,8 @@ sshclient = paramiko.SSHClient() # Create an ssh client.
 sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # Affirm that you trust the server being connected to.
 sshclient.connect(hostname="skopossecurity.com", username="ftpuser", password="juicy") # Attempt a connection to the server.
 
+username = "fake" # Hard coding the user account for our prototype.
+
 codec = cv2.VideoWriter_fourcc('M','J','P','G') # Define the codec used to compress video files.
 
 
@@ -54,7 +56,18 @@ codec = cv2.VideoWriter_fourcc('M','J','P','G') # Define the codec used to compr
 ### Camera operation functions.
 ###
 
-#
+# Returns a list of a users directory.
+def UserDir(extension):
+
+    sftpclient = sshclient.open_sftp() # Opens an sftp connection.
+    sftpclient.chdir(username) # Moves to the user's directory.
+    dirlist = sftpclient.listdir(".") # Gets a list of their directory.
+    sftpclient.close() # Closes the sftp connection.
+
+    dirlist = [file for file in dirlist if extension in file] # Removes all files not containing the desired extension.
+    return dirlist
+
+# Geneates a unique file name and returns it.
 def NameGen(type, extension):
     
     i = 0 # Incrimentor variable.
