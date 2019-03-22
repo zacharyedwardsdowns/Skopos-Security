@@ -34,6 +34,7 @@
 import paramiko # Used to set up ssh and sftp.
 import time # Used to time footage recordings.
 import cv2 # For reading and writing from camera + motion detection and object tracking/recognition.
+import os # For changing the directory.
 
 # Establish an ssh connection to the server.
 sshclient = paramiko.SSHClient() # Create an ssh client.
@@ -48,18 +49,18 @@ codec = cv2.VideoWriter_fourcc('M','J','P','G') # Define the codec used to compr
 ###
 
 #
-#def NameGen():
-    
+#def NameGen(type):
 
 # Starts the recording of 5 minute footage segments.
 def Record():
 
+    os.chdir("Footage") # Write to "the footage folder.
     camera = cv2.VideoCapture(0) # Set up a video feed from the camera
     vidout = cv2.VideoWriter('output.mkv', codec, 30, (640,480)) # File to write footage to at 30 fps.
-    timer = time.time() + 301 # Set a 5 minute timer in seconds to record footage clip
-
+    timer = time.time() + 300 # Set a 5 minute timer in seconds to record footage clip
+    
     # Write video data while camera is recording and recording is less than 5 minutes.
-    while(camera.isOpened() and time.time() < timer):
+    while(camera.isOpened() and time.time() <= timer):
 
         state, frame = camera.read()  # Read a frame from the camera.
 
@@ -75,6 +76,7 @@ def Record():
 def stopRecord(camera, vidout):
     camera.release() # Release the camera.
     vidout.release() # Release the video file.
+    os.chdir("..") # Return to the files directory.
 
 # Uploads images and videos to a user's folder on the server.
 def Uplaod(filename, extension):
