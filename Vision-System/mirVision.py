@@ -34,7 +34,13 @@
 import paramiko # Used to set up ssh and sftp.
 import time # Used to time footage recordings.
 import cv2 # For reading and writing from camera + motion detection and object tracking/recognition.
+import sys # Used for exiting upon error.
 import os # For changing the directory.
+
+# Define limit on the numbers of file that can be made by type.
+FOOTAGELIM = 5
+IMAGELIM = 30
+CLIPLIM = 10
 
 # Establish an ssh connection to the server.
 sshclient = paramiko.SSHClient() # Create an ssh client.
@@ -49,7 +55,28 @@ codec = cv2.VideoWriter_fourcc('M','J','P','G') # Define the codec used to compr
 ###
 
 #
-#def NameGen(type):
+def NameGen(type):
+    
+    if type == "footage": # If of type footage make cwd Footage
+        os.chdir("Footage")
+    elif type == "clip": # If of type clip make cwd Clips
+        os.chdir("Clips")
+    elif type == "image": # If of type image make cwd Images
+        os.chdir("Images")
+    else:
+        print ("Error creating file name.")
+        sys.exit(1) # If none of the above exit with eroor.
+    
+    # Grab a list of files from current diretory.
+    for files in os.walk("."):
+        for filename in files:
+            if filename  is not ".":
+                file = filename
+
+    # Generate an unused filename
+    for i in range(n):
+
+    os.chdir("..")
 
 # Starts the recording of 5 minute footage segments.
 def Record():
@@ -91,7 +118,7 @@ def Uplaod(filename, extension):
 ### Cleanup before exit.
 ###
 
-Record()
+NameGen("footage")
 
-# Close the ssh client.
-sshclient.close()
+sshclient.close() # Close the ssh client.
+sys.exit(0) # Exit without error.
