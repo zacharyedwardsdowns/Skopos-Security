@@ -67,7 +67,7 @@ def Delete(file):
     if isinstance(file, list):
         file.sort()
         file = file[0]
-
+    print(file)
     # Determine what path to delete from.
     if "footage" in file:
         path = "Footage/"
@@ -98,13 +98,13 @@ def UserDir(extension):
 
 # Helps NameGen by not repeating footage fle code.
 def GenHelper():
-    
+   # file = None
     # Grab a list of files from footage diretory.
     for files in os.walk("Footage"):
         for filename in files:
             if filename  is not ".":
                 file = filename
-
+        
     return file
 
 
@@ -115,6 +115,9 @@ def NameGen(type, extension):
 
     if type == "footage": # If of type footage make cwd Footage
         file = GenHelper() # Get files in the footage directory.
+       # if file is None:
+        #    print(os.getcwd())
+        #    file = open("Footage/Footage0." + extension,'w+')
         n = FOOTAGELIM # n is used to set the file limit for the given type.
 
         # If file is of size n then delete footage0, rename footage1 to footage0, then re-get files.
@@ -172,31 +175,52 @@ def Record():
     while(camera.isOpened() and time.time() <= timer):
 
         state, frame2 = camera.read()  # Read a frame from the camera.
-        f1_gray = cv2.cvtColor(frame1,cv2.COLOR_BGR2GRAY) #convert to gray for motion detection
-        f2_gray = cv2.cvtColor(frame2,cv2.COLOR_BGR2GRAY)
-        frame1_blur = cv2.GaussianBlur(f1_gray,(21,21),0) #blur it to reduce noice
-        frame2_blur = cv2.GaussianBlur(f2_gray,(21,21),0) #blur it to reduce noice
-        diff = cv2.absdiff(frame1_blur,frame2_blur)
-        thresh = cv2.threshold(diff, 20, 255, cv2.THRESH_BINARY)[1] #make colors at 20 or less = 255
-        masked = cv2.bitwise_and(frame1,frame1, mask=thresh) #mask we only care about white pixels
-       
-        white_pixels = np.sum(thresh) / 255 #find all white pixels in the image
-        rows, cols = thresh.shape # get the matrix of the image
-        total = rows * cols # # rows * # columns
-        if white_pixels > 0.01 * total: #if the image contains 1% white pixels than something has moved
-            #notify motion has occurred
-            #send recording to server
-            font = cv2.FONT_HERSHEY_SIMPLEX
-            cv2.putText(frame1,'Movement Detected',(10,50), font, 1, (0,0,255),2,cv2.LINE_AA)
+        MotionDetect(frame1,frame2) 
         cv2.imshow("test",frame1)
+        k = cv2.waitKey(10)
+        if k == ord('q'):
+            cv2.destroyAllWindows()
+            break
+        frame1 = frame2 #move to next frame
+        state, frame2 = camera.read()
         if state == True:
             vidout.write(frame1); # If frame was read, write it to the output file.
         else:
             print ("Recording failed...")
             break # If frame was not read, end recording.
+        
 
     stopRecord(camera, vidout) # End the recording.
+def MotionDetect(frame1,frame2):
+    f1_gray = cv2.cvtColor(frame1,cv2.COLOR_BGR2GRAY) #convert to gray for motion detection
+    f2_gray = cv2.cvtColor(frame2,cv2.COLOR_BGR2GRAY)
+    frame1_blur = cv2.GaussianBlur(f1_gray,(21,21),0) #blur it to reduce noice
+    frame2_blur = cv2.GaussianBlur(f2_gray,(21,21),0) #blur it to reduce noice
+    diff = cv2.absdiff(frame1_blur,frame2_blur)
+    thresh = cv2.threshold(diff, 20, 255, cv2.THRESH_BINARY)[1] #make colors at 20 or less = 255
+    masked = cv2.bitwise_and(frame1,frame1, mask=thresh) #mask we only care about white pixels
+     
+       
+    white_pixels = np.sum(thresh) / 255 #find all white pixels in the image
+    rows, cols = thresh.shape # get the matrix of the image
+    total = rows * cols # # rows * # columns
+    if white_pixels > 0.01 * total: #if the image contains 1% white pixels than something has moved
+            #notify motion has occurred
+            #send recording to server
+            
+            #Clip(frame1)
+        print("Motion detected")
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        cv2.putText(frame1,'Movement Detected',(10,50), font, 1, (0,0,255),2,cv2.LINE_AA)
+            
+   
+            
 
+def Clip(frame):
+    if frame is None:
+        return
+    name = NameGen('clip','jpg')
+    cv2.imwrite(name,frame)
 
 # When called removes recording components.
 def stopRecord(camera, vidout):
