@@ -175,10 +175,11 @@ def Record():
     while(camera.isOpened() and time.time() <= timer):
 
         state, frame2 = camera.read()  # Read a frame from the camera.
-        MotionDetect(frame1,frame2) 
+        detected = MotionDetect(frame1,frame2, camera)
         cv2.imshow("test",frame1)
         k = cv2.waitKey(10)
-        if k == ord('q'):
+        if k == ord('q') or detected is True:
+            Image(frame2)
             cv2.destroyAllWindows()
             break
         frame1 = frame2 #move to next frame
@@ -191,7 +192,9 @@ def Record():
         
 
     stopRecord(camera, vidout) # End the recording.
-def MotionDetect(frame1,frame2):
+
+# Detect motion.
+def MotionDetect(frame1,frame2, camera):
     f1_gray = cv2.cvtColor(frame1,cv2.COLOR_BGR2GRAY) #convert to gray for motion detection
     f2_gray = cv2.cvtColor(frame2,cv2.COLOR_BGR2GRAY)
     frame1_blur = cv2.GaussianBlur(f1_gray,(21,21),0) #blur it to reduce noice
@@ -205,22 +208,21 @@ def MotionDetect(frame1,frame2):
     rows, cols = thresh.shape # get the matrix of the image
     total = rows * cols # # rows * # columns
     if white_pixels > 0.01 * total: #if the image contains 1% white pixels than something has moved
-            #notify motion has occurred
-            #send recording to server
+        return True
+        #notify motion has occurred
+        #send recording to server
+        #font = cv2.FONT_HERSHEY_SIMPLEX
+        #cv2.putText(frame1,'Movement Detected',(10,50), font, 1, (0,0,255),2,cv2.LINE_AA)
+    else:
+        return False
             
-            #Clip(frame1)
-        print("Motion detected")
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(frame1,'Movement Detected',(10,50), font, 1, (0,0,255),2,cv2.LINE_AA)
-            
-   
-            
+# Write an image.
+def Image(frame):
 
-def Clip(frame):
-    if frame is None:
-        return
-    name = NameGen('clip','jpg')
+    name = NameGen('image', 'jpg')
     cv2.imwrite(name,frame)
+
+#def Clip():
 
 # When called removes recording components.
 def stopRecord(camera, vidout):
