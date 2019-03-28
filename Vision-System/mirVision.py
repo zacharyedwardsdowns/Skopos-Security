@@ -67,7 +67,7 @@ def Delete(file):
     if isinstance(file, list):
         file.sort()
         file = file[0]
-    print(file)
+    
     # Determine what path to delete from.
     if "footage" in file:
         path = "Footage/"
@@ -162,30 +162,32 @@ def NameGen(type, extension):
 
     return namegen
 
+
 # Starts the recording of 5 minute footage segments.
 def Record():
 
     outfile = NameGen("footage", "mkv") # Grab an unused file name.
     os.chdir("Footage") # Write to "the footage folder.
+
     camera = cv2.VideoCapture(0) # Set up a video feed from the camera
     vidout = cv2.VideoWriter(outfile, codec, 30, (640,480)) # File to write footage to at 30 fps.
-    timer = time.time() + 300 # Set a 5 minute timer in seconds to record footage clip
-    state, frame1 = camera.read() #get initial frame to compare to see if there has been motion 
+    timer = time.time() + 300 # Set a 5 minute timer in seconds to record footage clip.
+    state, Oframe = camera.read() # Get initial frame to compare to see if there has been motion.
+
     # Write video data while camera is recording and recording is less than 5 minutes.
     while(camera.isOpened() and time.time() <= timer):
 
-        state, frame2 = camera.read()  # Read a frame from the camera.
-        detected = MotionDetect(frame1,frame2, camera)
-        cv2.imshow("test",frame1)
-        k = cv2.waitKey(10)
-        if k == ord('q') or detected is True:
-            Image(frame2)
-            cv2.destroyAllWindows()
+        state, Cframe = camera.read()  # Read a frame from the camera.
+        detected = MotionDetect(Oframe,Cframe) # Detect motion based on the original frame. (Returns a Boolean.)
+
+        if detected is True: # If motion was detected then write an image of the detected frame.
+            Image(Cframe)
             break
-        frame1 = frame2 #move to next frame
-        state, frame2 = camera.read()
+
+        Oframe = Cframe #move to next frame
+
         if state == True:
-            vidout.write(frame1); # If frame was read, write it to the output file.
+            vidout.write(Oframe); # If frame was read, write it to the output file.
         else:
             print ("Recording failed...")
             break # If frame was not read, end recording.
@@ -193,36 +195,37 @@ def Record():
 
     stopRecord(camera, vidout) # End the recording.
 
+
 # Detect motion.
-def MotionDetect(frame1,frame2, camera):
-    f1_gray = cv2.cvtColor(frame1,cv2.COLOR_BGR2GRAY) #convert to gray for motion detection
-    f2_gray = cv2.cvtColor(frame2,cv2.COLOR_BGR2GRAY)
-    frame1_blur = cv2.GaussianBlur(f1_gray,(21,21),0) #blur it to reduce noice
-    frame2_blur = cv2.GaussianBlur(f2_gray,(21,21),0) #blur it to reduce noice
-    diff = cv2.absdiff(frame1_blur,frame2_blur)
+def MotionDetect(Oframe,Cframe):
+
+    f1_gray = cv2.cvtColor(Oframe,cv2.COLOR_BGR2GRAY) #convert to gray for motion detection
+    f2_gray = cv2.cvtColor(Cframe,cv2.COLOR_BGR2GRAY) #convert to gray for motion detection
+    
+    Oframe_blur = cv2.GaussianBlur(f1_gray,(21,21),0) #blur it to reduce noice
+    Cframe_blur = cv2.GaussianBlur(f2_gray,(21,21),0) #blur it to reduce noice
+
+    diff = cv2.absdiff(Oframe_blur,Cframe_blur)
     thresh = cv2.threshold(diff, 20, 255, cv2.THRESH_BINARY)[1] #make colors at 20 or less = 255
-    masked = cv2.bitwise_and(frame1,frame1, mask=thresh) #mask we only care about white pixels
+    masked = cv2.bitwise_and(Oframe,Oframe, mask=thresh) #mask we only care about white pixels
      
        
     white_pixels = np.sum(thresh) / 255 #find all white pixels in the image
     rows, cols = thresh.shape # get the matrix of the image
-    total = rows * cols # # rows * # columns
+    total = rows * cols # # of rows * # of columns
+
     if white_pixels > 0.01 * total: #if the image contains 1% white pixels than something has moved
         return True
-        #notify motion has occurred
-        #send recording to server
-        #font = cv2.FONT_HERSHEY_SIMPLEX
-        #cv2.putText(frame1,'Movement Detected',(10,50), font, 1, (0,0,255),2,cv2.LINE_AA)
     else:
         return False
-            
+
+
 # Write an image.
 def Image(frame):
 
     name = NameGen('image', 'jpg')
     cv2.imwrite(name,frame)
 
-#def Clip():
 
 # When called removes recording components.
 def stopRecord(camera, vidout):
