@@ -99,7 +99,7 @@ def UserDir(extension):
 
 # Helps NameGen by not repeating footage fle code.
 def GenHelper():
-   # file = None
+
     # Grab a list of files from footage diretory.
     for files in os.walk("Footage"):
         for filename in files:
@@ -238,14 +238,14 @@ def MotionDetect(Oframe,Cframe):
         return False
 
 
-# Write an image.
+# Write an image the upload its.
 def Image(frame):
 
-    os.chdir('Images')
-    name = NameGen('image', 'jpg')
-    cv2.imwrite(name,frame)
-    Upload(name)
-    os.chdir('..')
+    os.chdir('Images') # Change to the image directory.
+    name = NameGen('image', 'jpg') # Generate a unique image name.
+    cv2.imwrite(name,frame) # Write the image to the file specified by name.
+    Upload(name) # Upload the image to the server.
+    os.chdir('..') # Return to the original directory.
 
 
 # Record clips after motion is detected until motion has ended for at least a few seconds.
