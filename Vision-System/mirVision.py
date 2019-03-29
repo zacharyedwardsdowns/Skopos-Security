@@ -38,7 +38,7 @@ import time # Used to time footage recordings.
 import cv2 # For reading and writing from camera + motion detection and object tracking/recognition.
 import sys # Used for exiting upon error.
 import os # For changing the directory.
-import numpy as np
+import numpy as np # Used to sum for motion detection.
 
 # Define limit on the numbers of file that can be made by type.
 FOOTAGELIM = 2
@@ -67,7 +67,7 @@ def Delete(file):
     if isinstance(file, list):
         file.sort()
         file = file[0]
-    print(file)
+    
     # Determine what path to delete from.
     if "footage" in file:
         path = "Footage/"
@@ -162,65 +162,105 @@ def NameGen(type, extension):
 
     return namegen
 
+
 # Starts the recording of 5 minute footage segments.
 def Record():
 
     outfile = NameGen("footage", "mkv") # Grab an unused file name.
     os.chdir("Footage") # Write to "the footage folder.
+
     camera = cv2.VideoCapture(0) # Set up a video feed from the camera
     vidout = cv2.VideoWriter(outfile, codec, 30, (640,480)) # File to write footage to at 30 fps.
-    timer = time.time() + 300 # Set a 5 minute timer in seconds to record footage clip
-    state, frame1 = camera.read() #get initial frame to compare to see if there has been motion 
+    timer = time.time() + 300 # Set a 5 minute timer in seconds to record footage clip.
+    state, Oframe = camera.read() # Get initial frame to compare to see if there has been motion.
+
     # Write video data while camera is recording and recording is less than 5 minutes.
     while(camera.isOpened() and time.time() <= timer):
 
-        state, frame2 = camera.read()  # Read a frame from the camera.
-        MotionDetect(frame1,frame2) 
-        cv2.imshow("test",frame1)
-        k = cv2.waitKey(10)
-        if k == ord('q'):
-            cv2.destroyAllWindows()
-            break
-        frame1 = frame2 #move to next frame
-        state, frame2 = camera.read()
+        state, Cframe = camera.read()  # Read a frame from the camera.
+        detected = MotionDetect(Oframe,Cframe) # Detect motion based on the original frame. (Returns a Boolean.)
+
+        if detected is True: # If motion was detected...
+            stopRecord(camera, vidout)
+            Image(Cframe)
+            Clip()
+            return
+
+        Oframe = Cframe #move to next frame
+
         if state == True:
-            vidout.write(frame1); # If frame was read, write it to the output file.
+            vidout.write(Oframe); # If frame was read, write it to the output file.
         else:
             print ("Recording failed...")
             break # If frame was not read, end recording.
-        
 
     stopRecord(camera, vidout) # End the recording.
-def MotionDetect(frame1,frame2):
-    f1_gray = cv2.cvtColor(frame1,cv2.COLOR_BGR2GRAY) #convert to gray for motion detection
-    f2_gray = cv2.cvtColor(frame2,cv2.COLOR_BGR2GRAY)
-    frame1_blur = cv2.GaussianBlur(f1_gray,(21,21),0) #blur it to reduce noice
-    frame2_blur = cv2.GaussianBlur(f2_gray,(21,21),0) #blur it to reduce noice
-    diff = cv2.absdiff(frame1_blur,frame2_blur)
+
+
+# Detect motion.
+def MotionDetect(Oframe,Cframe):
+
+    f1_gray = cv2.cvtColor(Oframe,cv2.COLOR_BGR2GRAY) #convert to gray for motion detection
+    f2_gray = cv2.cvtColor(Cframe,cv2.COLOR_BGR2GRAY) #convert to gray for motion detection
+    
+    Oframe_blur = cv2.GaussianBlur(f1_gray,(21,21),0) #blur it to reduce noice
+    Cframe_blur = cv2.GaussianBlur(f2_gray,(21,21),0) #blur it to reduce noice
+
+    diff = cv2.absdiff(Oframe_blur,Cframe_blur)
     thresh = cv2.threshold(diff, 20, 255, cv2.THRESH_BINARY)[1] #make colors at 20 or less = 255
-    masked = cv2.bitwise_and(frame1,frame1, mask=thresh) #mask we only care about white pixels
+    masked = cv2.bitwise_and(Oframe,Oframe, mask=thresh) #mask we only care about white pixels
      
        
     white_pixels = np.sum(thresh) / 255 #find all white pixels in the image
     rows, cols = thresh.shape # get the matrix of the image
-    total = rows * cols # # rows * # columns
-    if white_pixels > 0.01 * total: #if the image contains 1% white pixels than something has moved
-            #notify motion has occurred
-            #send recording to server
-            
-            #Clip(frame1)
-        print("Motion detected")
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        cv2.putText(frame1,'Movement Detected',(10,50), font, 1, (0,0,255),2,cv2.LINE_AA)
-            
-   
-            
+    total = rows * cols # # of rows * # of columns
 
-def Clip(frame):
-    if frame is None:
-        return
-    name = NameGen('clip','jpg')
+    if white_pixels > 0.01 * total: #if the image contains 1% white pixels than something has moved
+        return True
+    else:
+        return False
+
+
+# Write an image.
+def Image(frame):
+
+    os.chdir('Images')
+    name = NameGen('image', 'jpg')
     cv2.imwrite(name,frame)
+    Upload(name)
+    os.chdir('..')
+
+
+# Record clips after motion is detected until motion has ended for at least a few seconds.
+def Clip():
+
+    outfile = NameGen("clip", "mkv") # Grab an unused file name.
+    os.chdir("Clips") # Write to "the clips folder.
+
+    camera = cv2.VideoCapture(0) # Set up a video feed from the camera
+    vidout = cv2.VideoWriter(outfile, codec, 30, (640,480)) # File to write clip to at 30 fps.
+    state, Oframe = camera.read() # Get initial frame to compare to see if there has been motion.
+
+    # Write video data while camera is recording.
+    while camera.isOpened():
+
+        state, Cframe = camera.read()  # Read a frame from the camera.
+        detected = MotionDetect(Oframe,Cframe) # Detect motion based on the original frame. (Returns a Boolean.)
+
+        if detected is False: # If motion was detected...
+            Upload(outfile)
+            break
+
+        Oframe = Cframe #move to next frame
+
+        if state == True:
+            vidout.write(Oframe); # If frame was read, write it to the output file.
+        else:
+            print ("Recording failed...")
+            break # If frame was not read, end recording.
+        
+    stopRecord(camera, vidout) # End the recording.
+
 
 # When called removes recording components.
 def stopRecord(camera, vidout):
@@ -230,9 +270,7 @@ def stopRecord(camera, vidout):
 
 
 # Uploads images and videos to a user's folder on the server.
-def Uplaod(filename, extension):
-
-    file = filename + "." + extension # Combines filename and extension.
+def Upload(file):
 
     sftpclient = sshclient.open_sftp() # Opens an sftp connection.
     sftpclient.put(file, username + "/" + file) # Writes file to the user's folder.
