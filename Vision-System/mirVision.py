@@ -44,6 +44,7 @@ import numpy as np # Used to sum for motion detection.
 FOOTAGELIM = 2
 IMAGELIM = 30
 CLIPLIM = 10
+FRAMERATE = 10
 
 # Establish an ssh connection to the server.
 sshclient = paramiko.SSHClient() # Create an ssh client.
@@ -166,11 +167,12 @@ def NameGen(type, extension):
 # Starts the recording of 5 minute footage segments.
 def Record():
 
+    firstdetect=False # Testing variable for alerting user of motion.
     outfile = NameGen("footage", "mkv") # Grab an unused file name.
     os.chdir("Footage") # Write to "the footage folder.
 
     camera = cv2.VideoCapture(0) # Set up a video feed from the camera
-    vidout = cv2.VideoWriter(outfile, codec, 30, (640,480)) # File to write footage to at 30 fps.
+    vidout = cv2.VideoWriter(outfile, codec, FRAMERATE, (640,480)) # File to write footage to at FRAMERATE fps.
     timer = time.time() + 300 # Set a 5 minute timer in seconds to record footage clip.
     state, Oframe = camera.read() # Get initial frame to compare to see if there has been motion.
 
@@ -181,10 +183,25 @@ def Record():
         detected = MotionDetect(Oframe,Cframe) # Detect motion based on the original frame. (Returns a Boolean.)
 
         if detected is True: # If motion was detected...
-            stopRecord(camera, vidout)
-            Image(Cframe)
-            Clip()
-            return
+
+            if firstdetect is False:
+
+                detecttimer = time.time() + 3 # Set timer for 3 seconds of motion.
+                firstdetect=True # Motion was detected for a moment.
+
+            elif time.time() >= detecttimer: # If motion was detected for a moment and motion was deteced for three seconds then...
+
+                stopRecord(camera, vidout) # Stop the recording.
+                Image(Cframe) # Upload an image.
+                Clip() # Record a clip.
+                return # End the function, needs to be changed later.
+                
+        else:
+            
+            if firstdetect is True and time.time() >= detecttimer: # If motion wasn't detected after the alloted time then...
+
+                firstdetect = False # Set first detect back to false.
+
 
         Oframe = Cframe #move to next frame
 
@@ -238,7 +255,7 @@ def Clip():
     os.chdir("Clips") # Write to "the clips folder.
 
     camera = cv2.VideoCapture(0) # Set up a video feed from the camera
-    vidout = cv2.VideoWriter(outfile, codec, 30, (640,480)) # File to write clip to at 30 fps.
+    vidout = cv2.VideoWriter(outfile, codec, FRAMERATE, (640,480)) # File to write clip to at FRAMERATE fps.
     state, Oframe = camera.read() # Get initial frame to compare to see if there has been motion.
 
     # Write video data while camera is recording.
