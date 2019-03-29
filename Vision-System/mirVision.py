@@ -183,6 +183,7 @@ def Record():
         if detected is True: # If motion was detected...
             stopRecord(camera, vidout)
             Image(Cframe)
+            Clip()
             return
 
         Oframe = Cframe #move to next frame
@@ -192,7 +193,6 @@ def Record():
         else:
             print ("Recording failed...")
             break # If frame was not read, end recording.
-        
 
     stopRecord(camera, vidout) # End the recording.
 
@@ -224,9 +224,42 @@ def MotionDetect(Oframe,Cframe):
 # Write an image.
 def Image(frame):
 
+    os.chdir('Images')
     name = NameGen('image', 'jpg')
     cv2.imwrite(name,frame)
     Upload(name)
+    os.chdir('..')
+
+
+# Record clips after motion is detected until motion has ended for at least a few seconds.
+def Clip():
+
+    outfile = NameGen("clip", "mkv") # Grab an unused file name.
+    os.chdir("Clips") # Write to "the clips folder.
+
+    camera = cv2.VideoCapture(0) # Set up a video feed from the camera
+    vidout = cv2.VideoWriter(outfile, codec, 30, (640,480)) # File to write clip to at 30 fps.
+    state, Oframe = camera.read() # Get initial frame to compare to see if there has been motion.
+
+    # Write video data while camera is recording.
+    while camera.isOpened():
+
+        state, Cframe = camera.read()  # Read a frame from the camera.
+        detected = MotionDetect(Oframe,Cframe) # Detect motion based on the original frame. (Returns a Boolean.)
+
+        if detected is False: # If motion was detected...
+            Upload(outfile)
+            break
+
+        Oframe = Cframe #move to next frame
+
+        if state == True:
+            vidout.write(Oframe); # If frame was read, write it to the output file.
+        else:
+            print ("Recording failed...")
+            break # If frame was not read, end recording.
+        
+    stopRecord(camera, vidout) # End the recording.
 
 
 # When called removes recording components.
@@ -237,7 +270,7 @@ def stopRecord(camera, vidout):
 
 
 # Uploads images and videos to a user's folder on the server.
-def Uplaod(file):
+def Upload(file):
 
     sftpclient = sshclient.open_sftp() # Opens an sftp connection.
     sftpclient.put(file, username + "/" + file) # Writes file to the user's folder.
