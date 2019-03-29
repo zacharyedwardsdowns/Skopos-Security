@@ -38,7 +38,7 @@ import time # Used to time footage recordings.
 import cv2 # For reading and writing from camera + motion detection and object tracking/recognition.
 import sys # Used for exiting upon error.
 import os # For changing the directory.
-import numpy as np
+import numpy as np # Used to sum for motion detection.
 
 # Define limit on the numbers of file that can be made by type.
 FOOTAGELIM = 2
@@ -180,9 +180,10 @@ def Record():
         state, Cframe = camera.read()  # Read a frame from the camera.
         detected = MotionDetect(Oframe,Cframe) # Detect motion based on the original frame. (Returns a Boolean.)
 
-        if detected is True: # If motion was detected then write an image of the detected frame.
+        if detected is True: # If motion was detected...
+            stopRecord(camera, vidout)
             Image(Cframe)
-            break
+            return
 
         Oframe = Cframe #move to next frame
 
@@ -225,6 +226,7 @@ def Image(frame):
 
     name = NameGen('image', 'jpg')
     cv2.imwrite(name,frame)
+    Upload(name)
 
 
 # When called removes recording components.
@@ -235,9 +237,7 @@ def stopRecord(camera, vidout):
 
 
 # Uploads images and videos to a user's folder on the server.
-def Uplaod(filename, extension):
-
-    file = filename + "." + extension # Combines filename and extension.
+def Uplaod(file):
 
     sftpclient = sshclient.open_sftp() # Opens an sftp connection.
     sftpclient.put(file, username + "/" + file) # Writes file to the user's folder.
