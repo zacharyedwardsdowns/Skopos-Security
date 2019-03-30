@@ -251,12 +251,15 @@ def Image(frame):
 # Record clips after motion is detected until motion has ended for at least a few seconds.
 def Clip():
 
+    setdetect=True
     outfile = NameGen("clip", "mkv") # Grab an unused file name.
     os.chdir("Clips") # Write to "the clips folder.
 
     camera = cv2.VideoCapture(0) # Set up a video feed from the camera
     vidout = cv2.VideoWriter(outfile, codec, FRAMERATE, (640,480)) # File to write clip to at FRAMERATE fps.
     state, Oframe = camera.read() # Get initial frame to compare to see if there has been motion.
+    timerMax = time.time() + 900 # Max of 15 minute recording.
+    cliptimer = timerMax
 
     # Write video data while camera is recording.
     while camera.isOpened():
@@ -264,9 +267,27 @@ def Clip():
         state, Cframe = camera.read()  # Read a frame from the camera.
         detected = MotionDetect(Oframe,Cframe) # Detect motion based on the original frame. (Returns a Boolean.)
 
-        if detected is False: # If motion was detected...
-            Upload(outfile)
-            break
+        if detected is True: # If motion was detected...
+
+            cliptimer = timerMax
+            setdetect = True
+
+            if time.time() >= cliptimer:
+                
+                Upload(outfile)
+                break
+
+        else:
+
+            if time.time() >= cliptimer:
+                
+                Upload(outfile)
+                break
+
+            if setdetect is True:
+
+                cliptimer = time.time() + 5
+                setdetect = False
 
         Oframe = Cframe #move to next frame
 
