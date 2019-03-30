@@ -40,6 +40,23 @@ import sys # Used for exiting upon error.
 import os # For changing the directory.
 import numpy as np # Used to sum for motion detection.
 
+
+###Neural Net
+
+#the categories in the trained neural net
+#categories = ["background", "aeroplane", "bicycle", "bird", "boat",
+#              "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
+#              "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
+#              "sofa", "train", "tvmonitor"]
+
+#model paths
+model_name = 'neural_net_models/MobileNetSSD_deploy.caffemodel'
+model_proto = 'neural_net_models/MobileNetSSD_deploy.prototxt.txt'
+
+#load trained model into opencv
+net = cv2.dnn.readNetFromCaffe(model_proto, model_name)
+
+
 # Define limit on the numbers of file that can be made by type.
 FOOTAGELIM = 2
 IMAGELIM = 30
@@ -181,8 +198,7 @@ def Record():
 
         state, Cframe = camera.read()  # Read a frame from the camera.
         detected = MotionDetect(Oframe,Cframe) # Detect motion based on the original frame. (Returns a Boolean.)
-
-        if detected is True: # If motion was detected...
+        if detected is True and IsHuman(Cframe): # If motion was detected...
 
             if firstdetect is False:
 
@@ -213,6 +229,26 @@ def Record():
 
     stopRecord(camera, vidout) # End the recording.
 
+#detects if the motion is coming from a human
+def IsHuman(frame):
+   
+    #resize the frame
+    resized = cv2.resize(frame,(300,300))
+    #transform into a flattened array and in a format usable by the neural net
+    blob = cv2.dnn.blobFromImage(resized, 0.007843, (300, 300), 127.5)
+    net.setInput(blob)
+    #run detection
+    detections = net.forward()[0][0]
+    for i in range(len(detections)):
+        #get how sure the net is of this detection
+        confidence = round(detections[i][2] * 100,2)
+        #get the index of the category the net thinks this object is in
+        category_index = int(detections[i][1]) 
+        if confidence > 60 and category_index == 15:
+            return True
+    
+    return False
+            
 
 # Detect motion.
 def MotionDetect(Oframe,Cframe):
