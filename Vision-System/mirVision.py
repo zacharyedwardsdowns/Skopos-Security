@@ -44,10 +44,10 @@ import numpy as np # Used to sum for motion detection.
 ###Neural Net
 
 #the categories in the trained neural net
-categories = ["background", "aeroplane", "bicycle", "bird", "boat",
-              "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
-              "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
-              "sofa", "train", "tvmonitor"]
+#categories = ["background", "aeroplane", "bicycle", "bird", "boat",
+#              "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
+#              "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
+#              "sofa", "train", "tvmonitor"]
 
 #model paths
 model_name = 'neural_net_models/MobileNetSSD_deploy.caffemodel'
@@ -231,13 +231,12 @@ def Record():
 
 #detects if the motion is coming from a human
 def IsHuman(frame):
-    #get demensions of frame
-    h, w = frame.shape[:2]
+   
     #resize the frame
     resized = cv2.resize(frame,(300,300))
     #transform into a flattened array and in a format usable by the neural net
     blob = cv2.dnn.blobFromImage(resized, 0.007843, (300, 300), 127.5)
-
+    net.setInput(blob)
     #run detection
     detections = net.forward()[0][0]
     for i in range(len(detections)):
@@ -245,7 +244,7 @@ def IsHuman(frame):
         confidence = round(detections[i][2] * 100,2)
         #get the index of the category the net thinks this object is in
         category_index = int(detections[i][1]) 
-        if confidence > 60 and categories[category_index] == 'human':
+        if confidence > 60 and category_index == 15:
             return True
     
     return False
