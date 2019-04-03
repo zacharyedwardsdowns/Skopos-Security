@@ -33,7 +33,7 @@
 				<link rel="stylesheet" type="text/css" href="register.css"/>
 				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
 			</head>
-			<body style="background-color:rgba(0,0,0,0);">
+			<body style="background-color:rgba(12, 170, 149);">
 
             <!--THIS BUTTON EXECUTES LOG OUT-->
 				<div class="col-sm-3">

@@ -30,10 +30,10 @@
             <html>
 			<head>
 				<title>Skopos Security - User Home</title>
-				<link rel="stylesheet" type="text/css" href="user.css"/>
+				<link rel="stylesheet" type="text/css" href="home.css"/>
 				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
 			</head>
-			<body style="background-color:rgba(0,0,0,0);">
+			<body style="background-color:rgb(12, 170, 149);">
 
 			<?php // Grabs images from the ftp server.
 				
