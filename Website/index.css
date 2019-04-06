@@ -1,6 +1,11 @@
+html {
+  height: 100%;
+}
+
 #logo {
   margin-top: 100px;
 }
+
 ul {
   list-style-type: none;
   margin: 0;
@@ -26,5 +31,17 @@ ul {
   
   li a:hover {
     background-color: #18a895;
-    -webkit-text-fill-color: #83460d;
+    color: #542A0C;
+    text-decoration: none;
+  }
+
+  p, h1 , h2, h3{
+    color: #fff !important;
+    text-shadow: 3px 3px 5px #000;
+  }
+
+  #links {
+    color: #1E665C;
+    text-decoration: none;
+    text-shadow: 3px 3px 5px #54C3B4 !important;
   }
