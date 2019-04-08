@@ -85,21 +85,8 @@ def Delete(file):
     if isinstance(file, list):
         file.sort()
         file = file[0]
-    
-    # Determine what path to delete from.
-    if "footage" in file:
-        path = "Footage/"
-    elif "image" in file:
-        path = "Images/"
-    elif "clip" in file:
-        path = "Clips/"
-    else:
-        print("Cant delete a file of this type.")
-        sys.exit(1) # If no path matches then exit with error.
 
-    os.chdir(path) # Change wd to path.
     os.system("rm -f " + file) # Remove the specified file.
-    os.chdir("..") # Return to original directory.
 
 
 # Returns a list of a users directory.
@@ -118,11 +105,11 @@ def UserDir(extension):
 def GenHelper():
 
     # Grab a list of files from footage diretory.
-    for files in os.walk("Footage"):
+    for files in os.walk("."):
         for filename in files:
             if filename  is not ".":
                 file = filename
-        
+
     return file
 
 
@@ -141,8 +128,8 @@ def NameGen(type, extension):
         # If file is of size n then delete footage0, rename footage1 to footage0, then re-get files.
         if len(file) == n:
             file.sort()
-            Delete(file)
-            os.system("mv Footage/footage1.mkv Footage/footage0.mkv")
+            Delete(file[0])
+            os.system("mv footage1.mkv footage0.mkv")
             file = GenHelper()
 
     elif type == "clip": # If of type clip make cwd Clips
@@ -185,8 +172,8 @@ def NameGen(type, extension):
 def Record():
 
     firstdetect=False # Testing variable for alerting user of motion.
-    outfile = NameGen("footage", "mkv") # Grab an unused file name.
     os.chdir("Footage") # Write to "the footage folder.
+    outfile = NameGen("footage", "mkv") # Grab an unused file name.
 
     camera = cv2.VideoCapture(0) # Set up a video feed from the camera
     vidout = cv2.VideoWriter(outfile, codec, FRAMERATE, (640,480)) # File to write footage to at FRAMERATE fps.
@@ -198,7 +185,8 @@ def Record():
 
         state, Cframe = camera.read()  # Read a frame from the camera.
         detected = MotionDetect(Oframe,Cframe) # Detect motion based on the original frame. (Returns a Boolean.)
-        if detected is True and IsHuman(Cframe): # If motion was detected...
+
+        if detected is True and IsHuman(Cframe): # If motion was detected and a human is in frame then...
 
             if firstdetect is False:
 
@@ -229,6 +217,7 @@ def Record():
 
     stopRecord(camera, vidout) # End the recording.
 
+
 #detects if the motion is coming from a human
 def IsHuman(frame):
    
@@ -239,6 +228,7 @@ def IsHuman(frame):
     net.setInput(blob)
     #run detection
     detections = net.forward()[0][0]
+
     for i in range(len(detections)):
         #get how sure the net is of this detection
         confidence = round(detections[i][2] * 100,2)
@@ -250,7 +240,7 @@ def IsHuman(frame):
     return False
             
 
-# Detect motion.
+#detects motion in frame.
 def MotionDetect(Oframe,Cframe):
 
     f1_gray = cv2.cvtColor(Oframe,cv2.COLOR_BGR2GRAY) #convert to gray for motion detection
@@ -281,7 +271,8 @@ def Image(frame):
     name = NameGen('image', 'jpg') # Generate a unique image name.
     cv2.imwrite(name,frame) # Write the image to the file specified by name.
     Upload(name) # Upload the image to the server.
-    os.chdir('..') # Return to the original directory.
+    Delete(name)
+    os.chdir('..')
 
 
 # Record clips after motion is detected until motion has ended for at least a few seconds.
@@ -311,6 +302,7 @@ def Clip():
             if time.time() >= cliptimer:
                 
                 Upload(outfile)
+                Delete(outfile)
                 break
 
         else:
@@ -318,6 +310,7 @@ def Clip():
             if time.time() >= cliptimer:
                 
                 Upload(outfile)
+                Delete(outfile)
                 break
 
             if setdetect is True:
@@ -338,9 +331,9 @@ def Clip():
 
 # When called removes recording components.
 def stopRecord(camera, vidout):
+    os.chdir("..") # Return to the files directory. 
     camera.release() # Release the camera.
     vidout.release() # Release the video file.
-    os.chdir("..") # Return to the files directory.
 
 
 # Uploads images and videos to a user's folder on the server.
