@@ -133,7 +133,13 @@ def NameGen(type, extension):
             file = GenHelper()
 
     elif type == "clip": # If of type clip make cwd Clips
-        file = UserDir(extension) # Grabs file list from server.
+        file = UserDir('webm') # Grabs file list from server.
+
+        # Change all webm extenstions into mkv for comparison.
+        for i in range (len(file)):
+            file[i] = file[i][:-4]
+            file[i] += 'mkv'
+
         n = CLIPLIM
 
     elif type == "image": # If of type image make cwd Images
@@ -342,6 +348,10 @@ def Upload(file):
     sftpclient = sshclient.open_sftp() # Opens an sftp connection.
     sftpclient.put(file, username + "/" + file) # Writes file to the user's folder.
     sftpclient.close() # Closes the sftp connection.
+
+    # If uploading a video file then call a server-side script to convert it.
+    if 'mkv' in file:
+        sshclient.exec_command("python3 converter.py")
 
 
 
