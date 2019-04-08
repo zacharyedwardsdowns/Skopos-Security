@@ -1,6 +1,15 @@
+html {
+  width: 100%;
+}
+
 .with-margin {
 margin-bottom: 30px;
 float: right;
+}
+
+.clip-margin {
+  margin-bottom: 30px;
+  float: left;
 }
 
 input[type=submit] {
@@ -43,3 +52,17 @@ ul {
     background-color: #18a895;
     -webkit-text-fill-color: #83460d;
   }
+
+  #videos {
+    position: absolute;
+    left: 10%;
+  }
+
+  #images {
+    position: absolute;
+    right: 10%;
+  }
+
+.jumbotron {
+  background-color: transparent !important;
+}

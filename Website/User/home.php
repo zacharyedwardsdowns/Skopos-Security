@@ -35,6 +35,11 @@
 			</head>
 			<body style="background-color:rgb(12, 170, 149);">
 
+			<!--THIS BUTTON EXECUTES LOG OUT-->
+			<form action="logout.php">
+					<input type="submit" value="Logout" id="logout"/>
+				</form>
+
 			<?php // Grabs images from the ftp server.
 				
 				// Change the working directory to the user's account folder.
@@ -46,25 +51,36 @@
 					$images[] = (basename($filename));
 				}
 
+				// Grab all file names from the user's account folder with
+				// the .mkv extension and store them in the clips array.
+				foreach(glob('*webm') as $filename){
+					$clips[] = (basename($filename));
+				}
+
 			?>
 
-				<div class="container">
-					<div class="col sm-4">
+				<div class="jumbotron">
+					<div class="col sm-4" id ="videos">
+						<!--LOOP DISPLAYING ALL IMAGES IN USER'S ACCOUNT FOLDER-->
+						<?php for($i = 0; $i < sizeof($clips); $i++): ?>
+							<div class="row">
+								<video class="clip-margin" width="512" height="384" controls>
+									<source src="ftpserver/fake/<?php echo $clips[$i]; ?>" type="video/webm">
+									Your browser does not support the video tag.
+								</video>
+							</div>
+						<?php endfor; ?>
 					</div>
-					<div class="col sm-4">
+
+					<div class="col sm-4" id="images">
 						<!--LOOP DISPLAYING ALL IMAGES IN USER'S ACCOUNT FOLDER-->
 						<?php for($i = 0; $i < sizeof($images); $i++): ?>
 							<div class="row">
-								<img class="with-margin" src="ftpserver/fake/<?php echo $images[$i]; ?>"  width="512" height="288">
+								<img class="with-margin" src="ftpserver/fake/<?php echo $images[$i]; ?>"  width="512" height="384">
 							</div>
 						<?php endfor; ?>
 					</div>
 				</div>
-
-				<!--THIS BUTTON EXECUTES LOG OUT-->
-				<form action="logout.php">
-					<input type="submit" value="Logout" id="logout"/>
-				</form>
 				
 			</body>
 			</html>
