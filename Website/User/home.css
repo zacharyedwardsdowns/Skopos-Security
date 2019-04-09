@@ -12,15 +12,6 @@ float: right;
   float: left;
 }
 
-input[type=submit] {
-  padding:5px 15px;
-  background:#CCC;
-  border:0 none;
-  cursor:pointer;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-}
-
 #logo {
   margin-top: 100px;
 }
@@ -36,32 +27,39 @@ ul {
   width: 100%;
   }
   
-  li {
+li {
     float: left;
-  }
+}
   
-  li a {
-    display: block;
-    color: rgb(255, 255, 255);
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-  }
+form {
+  margin: 0px 0px 0px 0px !important;
+}
+
+li a, input[type="submit"] {
+  display: block;
+  background-color: transparent;
+  border: transparent;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
   
-  li a:hover {
-    background-color: #18a895;
-    -webkit-text-fill-color: #83460d;
+li a:hover, input[type="submit"]:hover {
+  background-color: #18a895;
+  color: #542A0C;
+  text-decoration: none;
   }
 
-  #videos {
-    position: absolute;
-    left: 10%;
+#videos {
+  position: absolute;
+  left: 10%;
   }
 
-  #images {
-    position: absolute;
-    right: 10%;
-  }
+#images {
+  position: absolute;
+  right: 10%;
+}
 
 .jumbotron {
   background-color: transparent !important;

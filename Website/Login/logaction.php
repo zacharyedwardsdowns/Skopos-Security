@@ -46,7 +46,6 @@
 //
 // Send user to their userpage.
 //
-    //
-    $url = 'https://skopossecurity.com/user';
+    $url = 'https://skopossecurity.com/user/home';
     header( "Location: $url" );
 ?>

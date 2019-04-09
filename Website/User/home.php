@@ -35,6 +35,13 @@
 			</head>
 			<body style="background-color:rgb(12, 170, 149);">
 
+			<ul>
+      			<li><a class="active" href="https://skopossecurity.com">Home</a></li>
+      			<li><a href="https://skopossecurity.com/login">Login</a></li>
+      			<li><a href="https://skopossecurity.com/register">Register</a></li>
+				<li><form action="logout.php"><input type="submit" value="Logout" id="logout"/></form></li>
+			</ul>
+
 			<!--THIS BUTTON EXECUTES LOG OUT-->
 			<form action="logout.php">
 					<input type="submit" value="Logout" id="logout"/>
@@ -43,7 +50,7 @@
 			<?php // Grabs images from the ftp server.
 				
 				// Change the working directory to the user's account folder.
-				chdir("ftpserver/$username");
+				chdir("../ftpserver/$username");
 
 				// Grab all file names from the user's account folder with
 				// the .jpg extension and store them in the images array.
@@ -65,7 +72,7 @@
 						<?php for($i = 0; $i < sizeof($clips); $i++): ?>
 							<div class="row">
 								<video class="clip-margin" width="512" height="384" controls>
-									<source src="ftpserver/fake/<?php echo $clips[$i]; ?>" type="video/webm">
+									<source src="../ftpserver/fake/<?php echo $clips[$i]; ?>" type="video/webm">
 									Your browser does not support the video tag.
 								</video>
 							</div>
@@ -76,7 +83,7 @@
 						<!--LOOP DISPLAYING ALL IMAGES IN USER'S ACCOUNT FOLDER-->
 						<?php for($i = 0; $i < sizeof($images); $i++): ?>
 							<div class="row">
-								<img class="with-margin" src="ftpserver/fake/<?php echo $images[$i]; ?>"  width="512" height="384">
+								<img class="with-margin" src="../ftpserver/fake/<?php echo $images[$i]; ?>"  width="512" height="384">
 							</div>
 						<?php endfor; ?>
 					</div>
