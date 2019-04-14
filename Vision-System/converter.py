@@ -7,7 +7,7 @@ directories=[]
 mkvs=[]
 
 # Move to the specified user directory.
-os.chdir('fake')
+os.chdir('/srv/http/ftpserver/fake')
 
 # Grab the files in the directory.
 for direcs in os.walk("."):
