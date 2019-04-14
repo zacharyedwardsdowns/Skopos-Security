@@ -7,7 +7,7 @@
     // Variables for sftp access.
     $server = "skopossecurity.com";
     $user = "ftpuser";
-    $pass = "juicy";
+    $pass = "juicyskopos";
 
     // Set ssh connection or exit script if failed.
     $link = ssh2_connect($server, 22) or die("Unable to connect to $server");
@@ -26,7 +26,7 @@
     $sftp = ssh2_sftp($link);
 
     // Creates a personal folder for the newly registerd account.
-    ssh2_sftp_mkdir($sftp, $argv[1]);
+    ssh2_sftp_mkdir($sftp, "/srv/http/ftpserver/$argv[1]");
 
     // Closes the connection.
     ssh2_disconnect($link);
