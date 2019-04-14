@@ -66,7 +66,7 @@ FRAMERATE = 10
 # Establish an ssh connection to the server.
 sshclient = paramiko.SSHClient() # Create an ssh client.
 sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # Affirm that you trust the server being connected to.
-sshclient.connect(hostname="skopossecurity.com", username="ftpuser", password="juicy") # Attempt a connection to the server.
+sshclient.connect(hostname="skopossecurity.com", username="ftpuser", password="juicyskopos") # Attempt a connection to the server.
 
 username = "fake" # Hard coding the user account for our prototype.
 
@@ -93,7 +93,7 @@ def Delete(file):
 def UserDir(extension):
 
     sftpclient = sshclient.open_sftp() # Opens an sftp connection.
-    sftpclient.chdir(username) # Moves to the user's directory.
+    sftpclient.chdir("/srv/http/ftpserver/" + username) # Moves to the user's directory.
     dirlist = sftpclient.listdir(".") # Gets a list of their directory.
     sftpclient.close() # Closes the sftp connection.
 
@@ -346,12 +346,12 @@ def stopRecord(camera, vidout):
 def Upload(file):
 
     sftpclient = sshclient.open_sftp() # Opens an sftp connection.
-    sftpclient.put(file, username + "/" + file) # Writes file to the user's folder.
+    sftpclient.put(file, "/srv/http/ftpserver/" + username + "/" + file) # Writes file to the user's folder.
     sftpclient.close() # Closes the sftp connection.
 
     # If uploading a video file then call a server-side script to convert it.
     if 'mkv' in file:
-        sshclient.exec_command("python3 converter.py")
+        sshclient.exec_command("python3 /srv/http/ftpserver/converter.py")
 
 
 
