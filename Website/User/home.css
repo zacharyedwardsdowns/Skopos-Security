@@ -64,3 +64,8 @@ li a:hover, input[type="submit"]:hover {
 .jumbotron {
   background-color: transparent !important;
 }
+
+h2 {
+  color: #fff !important;
+  text-shadow: 3px 3px 5px #000;
+}

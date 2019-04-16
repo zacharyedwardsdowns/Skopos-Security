@@ -36,9 +36,9 @@
 			<body style="background-color:rgb(12, 170, 149);">
 
 			<ul>
-      			<li><a class="active" href="https://skopossecurity.com">Home</a></li>
-      			<li><a href="https://skopossecurity.com/login">Login</a></li>
-      			<li><a href="https://skopossecurity.com/register">Register</a></li>
+      			<li><a class="active" href="https://skopossecurity.com/user/home">Home</a></li>
+      			<li><a href="https://skopossecurity.com/user/schedule">Schedule</a></li>
+      			<li><a href="https://skopossecurity.com/user/settings">Settings</a></li>
 				<li><form action="logout.php"><input type="submit" value="Logout" id="logout"/></form></li>
 			</ul>
 
@@ -68,23 +68,33 @@
 
 				<div class="jumbotron">
 					<div class="col sm-4" id ="videos">
+                        <h2 align = 'center'>Videos</h2>
 						<!--LOOP DISPLAYING ALL IMAGES IN USER'S ACCOUNT FOLDER-->
 						<?php for($i = 0; $i < sizeof($clips); $i++): ?>
 							<div class="row">
 								<video class="clip-margin" width="512" height="384" controls>
 									<source src="../ftpserver/fake/<?php echo $clips[$i]; ?>" type="video/webm">
 									Your browser does not support the video tag.
-								</video>
-							</div>
+                                </video>
+                            </div>
+                            <div style="text-align: center;">
+                                <button align = 'center' type="button">Download</button>
+                                <button align = 'center' type="button">Delete</button>
+                            </div>
 						<?php endfor; ?>
 					</div>
 
 					<div class="col sm-4" id="images">
+                        <h2 align = 'center'>Images</h2>
 						<!--LOOP DISPLAYING ALL IMAGES IN USER'S ACCOUNT FOLDER-->
 						<?php for($i = 0; $i < sizeof($images); $i++): ?>
 							<div class="row">
 								<img class="with-margin" src="../ftpserver/fake/<?php echo $images[$i]; ?>"  width="512" height="384">
-							</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <button align = 'center' type="button">Download</button>
+                                <button align = 'center' type="button">Delete</button>
+                            </div>
 						<?php endfor; ?>
 					</div>
 				</div>
