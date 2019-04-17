@@ -3,12 +3,12 @@ html {
 }
 
 .with-margin {
-margin-bottom: 30px;
+margin-bottom: 10px;
 float: right;
 }
 
 .clip-margin {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   float: left;
 }
 
@@ -68,4 +68,34 @@ li a:hover, input[type="submit"]:hover {
 h2 {
   color: #fff !important;
   text-shadow: 3px 3px 5px #000;
+  font-size: 3em !important;
+  margin-bottom: 25px !important;
+}
+
+#download {
+  display: inline-block;
+  padding: 5px 15px !important;
+  background-color:#3b3434 !important;
+  color: #DDD !important;
+  border:0 none;
+  cursor:pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  margin-bottom: 30px;
+}
+
+#delete {
+  display: inline-block;
+  padding: 5px 15px !important;
+  background-color:#3b3434 !important;
+  color: #DDD !important;
+  border:0 none;
+  cursor:pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  margin-bottom: 30px;
+}
+
+a:hover {
+  text-decoration: none !important;
 }
