@@ -2,6 +2,15 @@
 	// Carries over session from login.
 	session_start();
 
+	// If delete is set then delete the file delete is set to.
+	if(isset($_GET['delete']))
+	{
+		$ftd = $_GET['delete'];
+		unlink("../ftpserver/fake/$ftd");
+		$url = 'https://skopossecurity.com/user/home';
+        header( "Location: $url" );
+	}
+
 	// Check sessionID against the database.
 	// Create connection to the database.
     $link = mysqli_connect("localhost", "root", "juicy", "skopos");
@@ -78,7 +87,7 @@
                             </div>
                             <div style="text-align: center;">
 								<a id="download" href="../ftpserver/fake/<?php echo $clips[$i] ?>" download>Download</a>
-                                <button id='delete' align='center' type="button">Delete</button>
+                                <a id="delete" href="?delete=<?php echo $clips[$i] ?>">Delete</a>
                             </div>
 						<?php endfor; ?>
 					</div>
@@ -92,7 +101,7 @@
                             </div>
                             <div style="text-align: center;">
 								<a id="download" href="../ftpserver/fake/<?php echo $images[$i] ?>" download>Download</a>
-                                <button id='delete' align='center' type="button">Delete</button>
+                                <a id="delete" href="?delete=<?php echo $images[$i] ?>">Delete</a>
                             </div>
 						<?php endfor; ?>
 					</div>
