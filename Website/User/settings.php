@@ -52,6 +52,26 @@
 			echo "Please login.";
 		}
 
+
+		<?
+		if(isset($_REQUEST['username']))
+		{
+		$username=$_REQUEST['username'];
+		$qry="delete from user where username=$username";
+		$cd=$_REQUEST['username'];
+			if(mysql_query($qry))
+			{
+			$msg=" Deleted Successfully";
+		}
+			else
+			{
+			$msg="Error Deleting";
+			}
+		$url=$_REQUEST['url'];
+		header("Location:$url");
+		}
+		?>
+		
 	// Close link to the database.
 	mysqli_close($link);
 ?>
