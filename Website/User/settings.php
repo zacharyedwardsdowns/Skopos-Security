@@ -53,7 +53,8 @@
 		}
 
 
-		<?
+		?>
+		<?php
 		if(isset($_REQUEST['username']))
 		{
 		$username=$_REQUEST['username'];
@@ -70,8 +71,9 @@
 		$url=$_REQUEST['url'];
 		header("Location:$url");
 		}
-		?>
 		
 	// Close link to the database.
 	mysqli_close($link);
+
+	?>
 ?>

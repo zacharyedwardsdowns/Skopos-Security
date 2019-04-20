@@ -66,10 +66,10 @@ input[type=submit] {
 /* The message box is shown when the user clicks on the password field */
 #message {
   display:none;
-  background: #f1f1f1;
+  background: #0caa95;
   color: #000;
   position: fixed;
-  left: 40px;
+  right: 20em;
   padding: 20px;
   margin-top: 10px;
 }
@@ -87,7 +87,6 @@ input[type=submit] {
 .valid:before {
   position: relative;
   left: -35px;
-  content: "&#10004;";
 }
 
 /* Add a red text color and an "x" icon when the requirements are wrong */
@@ -97,6 +96,4 @@ input[type=submit] {
 
 .invalid:before {
   position: relative;
-  left: -35px;
-  content: "&#10006;";
 }
