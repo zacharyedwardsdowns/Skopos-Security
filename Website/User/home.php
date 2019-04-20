@@ -2,11 +2,14 @@
 	// Carries over session from login.
 	session_start();
 
+	// Set their username.
+	$username = $_SESSION["username"];
+
 	// If delete is set then delete the file delete is set to.
 	if(isset($_GET['delete']))
 	{
 		$ftd = $_GET['delete'];
-		unlink("../ftpserver/fake/$ftd");
+		unlink("../ftpserver/$username/$ftd");
 		$url = 'https://skopossecurity.com/user/home';
         header( "Location: $url" );
 	}
@@ -20,10 +23,6 @@
     {
         die("ERROR: Unable to establish connection to the database: " . mysqli_connect_error()); // Function outputs the cause of the error after the string.
 	}
-	
-
-	// Set their username.
-	$username = $_SESSION["username"];
 
 	// Check them against the database for a match.
     $sql = "SELECT sessionID FROM sessions WHERE username='$username';";
@@ -37,7 +36,7 @@
 
             <html>
 			<head>
-				<title>Skopos Security - User Home</title>
+				<title>SKOPOS - <?php echo ucfirst($username); ?>'s Home</title>
 				<link rel="stylesheet" type="text/css" href="home.css"/>
 				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
 			</head>
@@ -81,12 +80,12 @@
 						<?php for($i = 0; $i < sizeof($clips); $i++): ?>
 							<div class="row">
 								<video class="clip-margin" width="512" height="384" controls>
-									<source src="../ftpserver/fake/<?php echo $clips[$i]; ?>" type="video/webm">
+									<source src="../ftpserver/<?php echo "$username/$clips[$i]"; ?>" type="video/webm">
 									Your browser does not support the video tag.
                                 </video>
                             </div>
                             <div style="text-align: center;">
-								<a id="download" href="../ftpserver/fake/<?php echo $clips[$i] ?>" download>Download</a>
+								<a id="download" href="../ftpserver/<?php echo "$username/$clips[$i]"; ?>" download>Download</a>
                                 <a id="delete" href="?delete=<?php echo $clips[$i] ?>">Delete</a>
                             </div>
 						<?php endfor; ?>
@@ -97,10 +96,10 @@
 						<!--LOOP DISPLAYING ALL IMAGES IN USER'S ACCOUNT FOLDER-->
 						<?php for($i = 0; $i < sizeof($images); $i++): ?>
 							<div class="row">
-								<img class="with-margin" src="../ftpserver/fake/<?php echo $images[$i]; ?>"  width="512" height="384">
+								<img class="with-margin" src="../ftpserver/<?php echo "$username/$images[$i]"; ?>"  width="512" height="384">
                             </div>
                             <div style="text-align: center;">
-								<a id="download" href="../ftpserver/fake/<?php echo $images[$i] ?>" download>Download</a>
+								<a id="download" href="../ftpserver/<?php echo "$username/$images[$i]"; ?>" download>Download</a>
                                 <a id="delete" href="?delete=<?php echo $images[$i] ?>">Delete</a>
                             </div>
 						<?php endfor; ?>
