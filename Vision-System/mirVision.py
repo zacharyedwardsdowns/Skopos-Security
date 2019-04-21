@@ -4,28 +4,18 @@
 #   - Zachary Edwards Downs (Remedee)
 #   - Merrell Reed (mreed)
 
-# ~ Expected Functionalities ~
+# ~ Final Functionalities ~
 # 
 # +Recording of video while in the active state.
 # +Cutting of video into 5 minute chunks.
 # +Deletion of video older than 15 minutes.
-# +Writing of images and video to an FTP server.
-# +Verification of succesful upload.
+# +Writing of images and video to an SFTP server.
 # +Detection of motion.
-# +Object recognition of:
-#    - Humans
-#    - Dogs
-#    - Cats
-#    - Cars
-#    - Boxes
-# +Object tracking.
+# +Object recognition of Humans.
 # +Alerting of human motion.
 # +Alerting of box removal from camera's vision.
 # +The taking of a picture when human motion is detected.
 # +The recording of a clip when human motion is detected.
-# +Writing of the clip to the FTP server once motion ends.
-# +Entering of high alert mode if clip reaches 15 minutes.
-# +Queueing clip for deletion as soon as upload is verfied in high alert mode.
 
 
 
@@ -39,15 +29,7 @@ import cv2 # For reading and writing from camera + motion detection and object t
 import sys # Used for exiting upon error.
 import os # For changing the directory.
 import numpy as np # Used to sum for motion detection.
-
-
-###Neural Net
-
-#the categories in the trained neural net
-#categories = ["background", "aeroplane", "bicycle", "bird", "boat",
-#              "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
-#              "dog", "horse", "motorbike", "person", "pottedplant", "sheep",
-#              "sofa", "train", "tvmonitor"]
+import pymysql.cursors # Used to access the database.
 
 #model paths
 model_name = 'neural_net_models/MobileNetSSD_deploy.caffemodel'
@@ -55,7 +37,6 @@ model_proto = 'neural_net_models/MobileNetSSD_deploy.prototxt.txt'
 
 #load trained model into opencv
 net = cv2.dnn.readNetFromCaffe(model_proto, model_name)
-
 
 # Define limit on the numbers of file that can be made by type.
 FOOTAGELIM = 2
@@ -69,6 +50,7 @@ sshclient.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # Affirm that yo
 sshclient.connect(hostname="skopossecurity.com", username="ftpuser", password="juicyskopos") # Attempt a connection to the server.
 
 username = "fake" # Hard coding the user account for our prototype.
+email = sys.argv[1] # Get the email supplied at run-time.
 
 codec = cv2.VideoWriter_fourcc('M','J','P','G') # Define the codec used to compress video files.
 
@@ -203,6 +185,7 @@ def Record():
 
                 stopRecord(camera, vidout) # Stop the recording.
                 Image(Cframe) # Upload an image.
+                sshclient.exec_command('python /srv/http/mail.py 0 ' + email) # Send an alert to the user's email.
                 Clip() # Record a clip.
                 return # End the function, needs to be changed later.
                 
