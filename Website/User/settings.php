@@ -12,22 +12,15 @@
         die("ERROR: Unable to establish connection to the database: " . mysqli_connect_error()); // Function outputs the cause of the error after the string.
 	}
 	
-
 	// Set their username.
-	$username = $_SESSION["username"];
+    $username = $_SESSION["username"];
 
-	// Store data into variables
-	$email =  $_POST['em'];
-	$password = $_POST['pass'];
-	$phonenumber = $_POST['phnnum'];
-	
 	// Check them against the database for a match.
     $sql = "SELECT sessionID FROM sessions WHERE username='$username';";
 	$result = mysqli_query($link, $sql);
 	$testSession = mysqli_fetch_row($result);
 
-	// If the user show their page, if not show an error.
-
+	// If the user then show their page, if not then show an error.
 	if (isset($_SESSION["sessionID"]) && $_SESSION["sessionID"] == $testSession[0])
     {
 	?>
@@ -60,8 +53,9 @@
 
         <div class="container text-center">
             <legend>Account Settings</legend>
-            <form action="/user/settings">
+            <form method="post" action="https://www.skopossecurity.com/user/updateinfo">
                 <p>Password Reset:</p>
+                <input type="hidden" name="username" value="<?php echo $username; ?>" />
                 <div class="row">
                     <input type="password" id="password" placeholder="New Password" size="35" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number,one uppercase and lowercase letter, and at least 8 or more characters" name="pass" required/>
                 </div>
@@ -72,8 +66,9 @@
                     <input type="submit" value="Reset" id="update">
                 </div>
             </form>
-            <form action="/user/settings">
+            <form method="post" action="https://www.skopossecurity.com/user/updateinfo">
                 <p>Update Email or Phone Number:</p>
+                <input type="hidden" name="username" value="<?php echo $username; ?>" />
                 <div class="row">
                     <input type="email" id="email" placeholder="example@gmail.com" size="35" name="em" />
                 </div>
@@ -86,13 +81,26 @@
             </form>
 
             <script>
+                // If user clicks okay then delete the account, if they click cancel then do nothing.
                 function ConfirmDelete()
                 {
-                    confirm("Are you sure you want to delete your account <?php echo $username ?>?\nAll account and user data will be removed.\nPlease make sure to download any clips or images you wish to keep!");
+                    var answer = confirm("Are you sure you want to delete your account <?php echo $username; ?>?\nAll account and user data will be removed.\nPlease make sure to download any clips or images you wish to keep!");
+
+                    if (answer) 
+                    {
+                        answer = 'https://www.skopossecurity.com/user/delaccount.php'
+                    }
+                    else
+                    {
+                        answer = ''
+                    }
+
+                    document.getElementById('delacc').action = answer;
                 }
             </script>
-                                
-            <form name='del_update' action='settings.php?dealer_id=10&usnamer=1' method='post'/>
+
+            <form id='delacc' action='' method='post'/>
+                <input type="hidden" name="username" value="<?php echo $username; ?>" />
                 <input type="submit" value="Delete Account" id="delete" Onclick="ConfirmDelete()" />
             </form>
         </div>
