@@ -3,9 +3,8 @@ html {
 }
 
 #update {
-  position: relative;
-  left: 130px;
-  top: 30px;
+  margin-bottom: 40px !important;
+  display: inline-block;
   color: black;
   padding:5px 15px;
   background:lightgray;
@@ -15,50 +14,23 @@ html {
   border-radius: 5px;
 }
 
-#reset {
-  position: relative;
-  left: 40px;
-  padding:5px 15px;
-  background:lightgray;
-  border:0 none;
-  cursor:pointer;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-}
-
-#delete {
-  position: relative;
-  left: 40px;
-  padding:5px 15px;
-  background:lightgray;
-  border:0 none;
-  cursor:pointer;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-}
-
-.with-margin {
-margin-bottom: 10px;
-float: right;
-}
-
-.clip-margin {
-  margin-bottom: 10px;
-  float: left;
+#password, #email, #passwordcheck, #phonenumber {
+  margin-bottom: 20px;
 }
 
 #logo {
-  margin-top: 100px;
+  margin-top: 70px;
+  margin-bottom: 30px;
 }
 
 ul {
   list-style-type: none;
-  margin: 0;
-  padding: 0;
+  margin: 0px;
+  padding: 0px;
   overflow: hidden;
   background-color: #3b3434;
   position: fixed;
-  top: 0;
+  top: 0px;
   width: 100%;
   }
   
@@ -70,7 +42,14 @@ form {
   margin: 0px 0px 0px 0px !important;
 }
 
+p {
+  color: #fff !important;
+  text-shadow: 3px 3px 5px #000;
+  font-size: 1.2em !important;
+}
+
 li a, input[type="submit"] {
+  margin: 0px !important;
   display: block;
   background-color: transparent;
   border: transparent;
@@ -86,51 +65,21 @@ li a:hover, input[type="submit"]:hover {
   text-decoration: none;
   }
 
-#videos {
-  position: absolute;
-  left: 10%;
-  }
-
-#images {
-  position: absolute;
-  right: 10%;
-}
-
-.jumbotron {
-  background-color: transparent !important;
-}
-
-h2 {
+legend {
   color: #fff !important;
   text-shadow: 3px 3px 5px #000;
   font-size: 3em !important;
   margin-bottom: 25px !important;
 }
 
-#download {
-  display: inline-block;
-  padding: 5px 15px !important;
-  background-color:#3b3434 !important;
-  color: #DDD !important;
-  border:0 none;
-  cursor:pointer;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  margin-bottom: 30px;
-}
-
 #delete {
   display: inline-block;
   padding: 5px 15px !important;
-  background-color:#3b3434 !important;
+  background-color:#b11b1b !important;
   color: #DDD !important;
   border:0 none;
   cursor:pointer;
   -webkit-border-radius: 5px;
   border-radius: 5px;
   margin-bottom: 30px;
-}
-
-a:hover {
-  text-decoration: none !important;
 }

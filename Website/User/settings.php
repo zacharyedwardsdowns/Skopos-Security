@@ -32,7 +32,7 @@
     {
 	?>
 
-<html>
+    <html>
     <head>
         <title>SKOPOS - <?php echo ucfirst($username); ?>'s Settings</title>
         <link rel="stylesheet" type="text/css" href="settings.css"/>
@@ -40,19 +40,17 @@
     </head>
     <body style="background-color:rgba(12, 170, 149);">
 
-    <ul>
-              <li><a href="https://skopossecurity.com/user/home">Home</a></li>
-              <li><a href="https://skopossecurity.com/user/schedule">Schedule</a></li>
-              <li><a class="active" href="https://skopossecurity.com/user/settings">Settings</a></li>
+        <ul>
+            <li><a href="https://skopossecurity.com/user/home">Home</a></li>
+            <li><a href="https://skopossecurity.com/user/schedule">Schedule</a></li>
+            <li><a class="active" href="https://skopossecurity.com/user/settings">Settings</a></li>
             <li><form action="logout.php"><input type="submit" value="Logout" id="logout"/></form></li>
         </ul>
 
-        			<!--THIS BUTTON EXECUTES LOG OUT-->
-			<form action="logout.php">
-                <input type="submit" value="Logout" id="logout"/>
-            </form>
-
- 
+		<!--THIS BUTTON EXECUTES LOG OUT-->
+		<form action="logout.php">
+            <input type="submit" value="Logout" id="logout"/>
+        </form>
 
         <div class="container text-center" id="logo">
             <a href="https://skopossecurity.com">
@@ -60,45 +58,43 @@
             </a>
         </div>
 
-        <div class="container">
-            <div class="col-sm-6 text-center col-sm-offset-3" id="regbox">
-                <form method="post" action="https://www.skopossecurity.com/regaction">
-                    <h2>Account Settings</h2>
-                    <form action="/setting.php">
-                          <fieldset>
-                            <legend>Account information:</legend>
-                            Update Password:<br>
-                            <input type="password" id="password" placeholder="Password*" size="35" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number,one uppercase and lowercase letter, and at least 8 or more characters" name="pass" required/>
-                               <br><br>
-                            Confirm New Password:<br>
-                            <input type="password" id="passwordcheck" placeholder="Confirm Password*" size="35" name="passcheck"/>
-                            <br><br>
-                            Update Phone Number:<br>
-                            <input type="text" id="phonenumber" placeholder="Phn: 1112223333" pattern="[0-9]{10}" size="35" maxlength="10" name="phnnum"/>
-                            <br><br>
-                            Update Email:<br>
-                            <input type="email" id="email" placeholder="example@gmail.com*" size="35" name="em" />
-                            <br><br>
+        <div class="container text-center">
+            <legend>Account Settings</legend>
+            <form action="/user/settings">
+                <p>Password Reset:</p>
+                <div class="row">
+                    <input type="password" id="password" placeholder="New Password" size="35" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number,one uppercase and lowercase letter, and at least 8 or more characters" name="pass" required/>
+                </div>
+                <div class="row">
+                    <input type="password" id="passwordcheck" placeholder="Confirm New Password" size="35" name="passcheck" required/>
+                </div>
+                <div class="row">
+                    <input type="submit" value="Reset" id="update">
+                </div>
+            </form>
+            <form action="/user/settings">
+                <p>Update Email or Phone Number:</p>
+                <div class="row">
+                    <input type="email" id="email" placeholder="example@gmail.com" size="35" name="em" />
+                </div>
+                <div class="row">
+                    <input type="text" id="phonenumber" placeholder="Phn: 1112223333" pattern="[0-9]{10}" size="35" maxlength="10" name="phnnum"/>
+                </div>
+                <div class="row">
+                    <input type="submit" value="Update" id="update">
+                </div>
+            </form>
 
-                            <input type="submit" value="Update" id="update">
-                            <button type="reset"  value="Reset" id="reset">Reset</button>
-
-                            <script>
-                                function ConfirmDelete()
-                                {
-                                      confirm ("Are you sure you want to delete account?");
-                                }
-                            </script>
+            <script>
+                function ConfirmDelete()
+                {
+                    confirm("Are you sure you want to delete your account <?php echo $username ?>?\nAll account and user data will be removed.\nPlease make sure to download any clips or images you wish to keep!");
+                }
+            </script>
                                 
-                            <form name='del_update' action='settings.php?dealer_id=10&usnamer=1' method='post'/>
-                                <input type="submit" value="Delete Account" id="delete" Onclick="ConfirmDelete()" />
-                                <input type="hidden" name="id" value="41" />
-                                <input type="hidden" name="url" value="settings.php?dealer_id=10&username=1" />
-                            </form>
-                          </fieldset>
-                    </form>
-                </form>
-            </div>
+            <form name='del_update' action='settings.php?dealer_id=10&usnamer=1' method='post'/>
+                <input type="submit" value="Delete Account" id="delete" Onclick="ConfirmDelete()" />
+            </form>
         </div>
 
     </body>
@@ -109,25 +105,6 @@
 	else
 	{
 		echo "Please login.";
-	}
-
-	if(isset($_REQUEST['username']))
-	{
-		$username=$_REQUEST['username'];
-		$qry="delete from user where username=$username";
-		$cd=$_REQUEST['username'];
-
-		if(mysql_query($qry))
-		{
-			$msg=" Deleted Successfully";
-		}
-		else
-		{
-			$msg="Error Deleting";
-		}
-
-		$url=$_REQUEST['url'];
-		header("Location:$url");
 	}
 		
 	// Close link to the database.
