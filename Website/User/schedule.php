@@ -30,17 +30,94 @@
             <html>
 			<head>
 				<title>SKOPOS - <?php echo ucfirst($username); ?>'s Schedules</title>
-				<link rel="stylesheet" type="text/css" href="register.css"/>
+				<link rel="stylesheet" type="text/css" href="schedule.css"/>
 				<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
 			</head>
-			<body style="background-color:rgba(12, 170, 149);">
+            <body style="background-color:rgba(12, 170, 149);">
+                
+                <ul>
+                    <li><a href="https://skopossecurity.com/user/home">Home</a></li>
+                    <li><a class="active" href="https://skopossecurity.com/user/schedule">Schedule</a></li>
+                    <li><a href="https://skopossecurity.com/user/settings">Settings</a></li>
+                  <li><form action="logout.php"><input type="submit" value="Logout" id="logout"/></form></li>
+              </ul>
+      
+                    <!--THIS BUTTON EXECUTES LOG OUT-->
+                  <form action="logout.php">
+                      <input type="submit" value="Logout" id="logout"/>
+                  </form>
 
-            <!--THIS BUTTON EXECUTES LOG OUT-->
-				<div class="col-sm-3">
-					<form action="logout.php">
-						<input type="submit" value="Logout" id="logout"/>
-					</form>
-				</div>
+                <div class="container text-center" id="logo">
+                    <a href="https://skopossecurity.com">
+                        <img src="../Pictures/Logo.png" height="200" width="200"/>
+                    </a>
+                </div>
+
+                <!--Contains the Current Schedule-->
+                <div class="container text-center">
+                    <legend> <?php echo ucfirst($username); ?>'s Schedule </legend>
+                    <form class = "row">
+                    <h2>Current Schedule</h2>
+                        <div class="column left">
+                            <p>Day</p>
+                            <p>Monday</p>
+                            <p>Tuesday</p>
+                        </div>
+                        <div class="column middle">
+                            <p>Hour</p>
+                            <p>12</p>
+                            <p>6</p>
+                        </div>
+                        <div class="column right">
+                            <p>Minute</p>
+                            <p>45 pm</p>
+                            <p>30 pm</p>
+                        </div>
+                    </form>
+
+                <!--Contains the Add to Schedule-->
+                <div class="container text-center">
+                    <form action = "/schedule.php" class = "row">
+                    <h2>Add to Schedule</h2>
+                        <div class="column left">
+                            <p>Day</p>
+                            <input type="text" name="day" placeholder="Day of the week"/>
+                        </div>
+                        <div class="column middle">
+                            <p>Hour</p>
+                            <input type="text" name="hour" placeholder="Hour part of time"/>
+                        </div>
+                        <div class="column right">
+                            <p>Minute</p>
+                            <input type="text" name="minute" placeholder="Minute part of time"/>
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Add Schedule">
+                        </div>
+                    </form>
+
+                <!--Contains the Add to Schedule-->
+                <div class="container text-center">
+                        <form class = "row">
+                        <h2>Your Schedules</h2>
+                            <div class="column left">
+                                <p>Day</p>
+                                <p>Monday</p>
+                                <p>Tuesday</p>
+                            </div>
+                            <div class="column middle">
+                                <p>Hour</p>
+                                <p>12</p>
+                                <p>6</p>
+                            </div>
+                            <div class="column right">
+                                <p>Minute</p>
+                                <p>45 pm</p>
+                                <p>30 pm</p>
+                            </div>
+                        </form>
+
+                
 
 			</body>
 			</html>
