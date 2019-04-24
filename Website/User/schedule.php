@@ -59,17 +59,17 @@
                     <form class = "row">
                     <h2>Current Schedule</h2>
                         <div class="column left">
-                            <p>Day</p>
+                            <h3>Day</h3>
                             <p>Monday</p>
                             <p>Tuesday</p>
                         </div>
                         <div class="column middle">
-                            <p>Hour</p>
+                            <h3>Hour</h3>
                             <p>12</p>
                             <p>6</p>
                         </div>
                         <div class="column right">
-                            <p>Minute</p>
+                            <h3>Minute</h3>
                             <p>45 pm</p>
                             <p>30 pm</p>
                         </div>
@@ -80,38 +80,38 @@
                     <form action = "/schedule.php" class = "row">
                     <h2>Add to Schedule</h2>
                         <div class="column left">
-                            <p>Day</p>
+                            <h3>Day</h3>
                             <input type="text" name="day" placeholder="Day of the week"/>
                         </div>
                         <div class="column middle">
-                            <p>Hour</p>
+                            <h3>Hour</h3>
                             <input type="text" name="hour" placeholder="Hour part of time"/>
                         </div>
                         <div class="column right">
-                            <p>Minute</p>
+                            <h3>Minute</h3>
                             <input type="text" name="minute" placeholder="Minute part of time"/>
                         </div>
-                        <div class="submit">
+                        <div id="submit">
                             <input type="submit" value="Add Schedule">
                         </div>
                     </form>
 
-                <!--Contains the Add to Schedule-->
+                <!--Contains the Your schedules-->
                 <div class="container text-center">
                         <form class = "row">
                         <h2>Your Schedules</h2>
                             <div class="column left">
-                                <p>Day</p>
+                                <h3>Day</h3>
                                 <p>Monday</p>
                                 <p>Tuesday</p>
                             </div>
                             <div class="column middle">
-                                <p>Hour</p>
+                                <h3>Hour</h3>
                                 <p>12</p>
                                 <p>6</p>
                             </div>
                             <div class="column right">
-                                <p>Minute</p>
+                                <h3>Minute</h3>
                                 <p>45 pm</p>
                                 <p>30 pm</p>
                             </div>

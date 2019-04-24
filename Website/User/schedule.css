@@ -85,11 +85,12 @@ h2 {
 #submit {
   margin-bottom: 40px !important;
   display: inline-block;
-  color: black;
-  padding:5px 15px;
-  background:lightgray;
-  border:0 none;
-  cursor:pointer;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
+  color: rgb(92, 67, 50);
+  background:rgb(92, 67, 50);
+}
+
+h3 {
+  color: rgb(92, 67, 50) !important;
+  text-shadow: 3px 3px 5px rgb(255, 255, 255);
+  font-size: 30px !important;
 }
