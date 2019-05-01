@@ -1,17 +1,8 @@
 # Skopos Security
-A motion detection/object recognition vision system with an accompanying website.
+A senior capstone project whose goal was to produce vision software for a raspberry pi and webcam that could detect motion and recognize people. Not everything we set out to do was accomplished, as can be seen in this repositoris issues, but what was is summarized below. The semester long project is now over, and any sensitive data contained within such as usernames, passwords, and captcha keys are no longer valid. A report can be found in this repository going into further detail on the system.
 
 #### Vision System
-Will utilize a raspberry pi with a webcam for a camera.
-
-The vision system will be programmed in Python using the openCV library.
+Uses Python, OpenCV, Paramiko, and a pre-trained neural network to implement a motion detection/human recognition vision system for detecting when motion is caused by a human. If this condition is met then an alert is sent to the user's email address, and an image of when the motion occurred is uploaded to their account on the website. A video clip then records until motion has ended for at least five seconds, and is subsequently uploaded to their website account.
 
 #### Website
-The website is for configuring the system and accessing the data it uploads.
-
-It will be coded using HTML, CSS, and PHP. The accompanying database will be done in MySQL.
-
-Sensitive user data will be encrypted using the PassLib library in Python before being stored.
-
-###### Disclamer
-Some information such as captcha keys, encryption and decryption methods, and more are a part of this repository as this is not a real service but a group capstone project.
+Was made for accessing the vision system's output and linking cameras to an account. It was programmed using HTML, PHP, CSS, and Python. The website and MySQL database were hosted using the Apache and MariaDB packages on Manjaro Linux. It consisted of an informational homepage, a registration page using Google's No CAPTCHA reCAPTCHA , a login page using php sessions, and various user related pages. The user home page contained their camera's uploaded images and clips. The user could download or delete these images and clips using this page. Only the front-end was implemented for the user schedule page where the user was supposed to schedule their camera's activation times. The user settings page allowed for the password to be reset, and their email and phone number information to be updated. Finally we had a mail script that was used to send alerts with a skopos gmail account and Google's smtp.
