@@ -61,19 +61,17 @@
                         <div class="column left">
                             <h3>Day</h3>
                             <p>Monday</p>
-                            <p>Tuesday</p>
                         </div>
                         <div class="column middle">
-                            <h3>Hour</h3>
-                            <p>12</p>
-                            <p>6</p>
+                            <h3>Start</h3>
+                            <p>10:15</p>
                         </div>
                         <div class="column right">
-                            <h3>Minute</h3>
-                            <p>45 pm</p>
-                            <p>30 pm</p>
+                            <h3>End</h3>
+                            <p>18:00</p>
                         </div>
                     </form>
+                </div>
 
                 <!--Contains the Add to Schedule-->
                 <div class="container text-center">
@@ -84,17 +82,18 @@
                             <input type="text" name="day" placeholder="Day of the week"/>
                         </div>
                         <div class="column middle">
-                            <h3>Hour</h3>
-                            <input type="text" name="hour" placeholder="Hour part of time"/>
+                            <h3>Start</h3>
+                            <input type="text" name="hour" placeholder="Time to activate system"/>
                         </div>
                         <div class="column right">
-                            <h3>Minute</h3>
-                            <input type="text" name="minute" placeholder="Minute part of time"/>
+                            <h3>End</h3>
+                            <input type="text" name="minute" placeholder="Time to deactivate system"/>
                         </div>
-                        <div id="submit">
+                        <div id="submit" style="margin-top: 10px;">
                             <input type="submit" value="Add Schedule">
                         </div>
                     </form>
+                    </div>
 
                 <!--Contains the Your schedules-->
                 <div class="container text-center">
@@ -106,16 +105,17 @@
                                 <p>Tuesday</p>
                             </div>
                             <div class="column middle">
-                                <h3>Hour</h3>
-                                <p>12</p>
-                                <p>6</p>
+                                <h3>Start</h3>
+                                <p>10:15</p>
+                                <p>23:00</p>
                             </div>
                             <div class="column right">
-                                <h3>Minute</h3>
-                                <p>45 pm</p>
-                                <p>30 pm</p>
+                                <h3>End</h3>
+                                <p>18:00</p>
+                                <p>7:00</p>
                             </div>
                         </form>
+                    </div>
 
                 
 
